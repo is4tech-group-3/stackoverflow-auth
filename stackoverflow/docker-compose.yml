@@ -1,0 +1,15 @@
+services:
+  db_postgres:
+    image: postgres:latest
+    container_name: springboot_postgres
+    environment:
+      POSTGRES_DB: stack_overflow
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: is4tech
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
