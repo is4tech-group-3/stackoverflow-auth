@@ -1,4 +1,4 @@
-package com.stackoverflow.Main;
+package com.stackoverflow.main;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

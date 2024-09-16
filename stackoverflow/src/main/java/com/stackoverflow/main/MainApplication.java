@@ -1,4 +1,4 @@
-package com.stackoverflow.Main;
+package com.stackoverflow.main;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

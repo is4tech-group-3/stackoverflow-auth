@@ -11,7 +11,7 @@
 	<groupId>com.stackoverflow</groupId>
 	<artifactId>stackoverflow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Main</name>
+	<name>main</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
