@@ -56,7 +56,7 @@
 
 
     </changeSet>
-    
+
     <changeSet id="foreign_keys" author="weslly">
         <!-- Llave foránea para profile_id hacia user -->
         <addForeignKeyConstraint baseColumnNames="profile_id"
