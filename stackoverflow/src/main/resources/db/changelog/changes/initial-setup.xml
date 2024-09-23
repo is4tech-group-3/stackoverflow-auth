@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="table_user" author="weslly">
+        <createTable tableName="user">
+            <column name="user_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(50)"/>
+            <column name="surname" type="VARCHAR(50)"/>
+            <column name="email" type="VARCHAR(50)">
+                <constraints unique="true"/>
+            </column>
+            <column name="username" type="VARCHAR(50)"/>
+            <column name="password" type="VARCHAR(512)"/>
+            <column name="age" type="SMALLINT"/>
+            <column name="dpi" type="BIGINT">
+                <constraints unique="true"/>
+            </column>
+            <column name="status" type="BOOLEAN"/>
+            <column name="created" type="TIMESTAMP"/>
+            <column name="profile_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="table_profile" author="weslly">
+        <createTable tableName="profile">
+            <column name="profile_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="description" type="VARCHAR(50)"/>
+            <column name="status" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="table_role" author="weslly">
+        <createTable tableName="role">
+            <column name="role_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(20)"/>
+            <column name="description" type="VARCHAR(50)"/>
+            <column name="status" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="detail_profile_role" author="weslly">
+        <createTable tableName="profile_role">
+            <column name="role_id" type="BIGINT"/>
+            <column name="profile_id" type="BIGINT"/>
+        </createTable>
+
+
+    </changeSet>
+
+    <changeSet id="foreign_keys" author="weslly">
+        <!-- Llave foránea para profile_id hacia user -->
+        <addForeignKeyConstraint baseColumnNames="profile_id"
+                                 baseTableName="user"
+                                 referencedColumnNames="profile_id"
+                                 referencedTableName="profile"
+                                 constraintName="profile_user" />
+
+        <!-- Llaves foráneas para profile_role -->
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="profile_role"
+                                 referencedColumnNames="role_id"
+                                 referencedTableName="role"
+                                 constraintName="role_profile_role" />
+
+        <addForeignKeyConstraint baseColumnNames="profile_id"
+                                 baseTableName="profile_role"
+                                 referencedColumnNames="profile_id"
+                                 referencedTableName="profile"
+                                 constraintName="profile_profile_role" />
+    </changeSet>
+</databaseChangeLog>
