@@ -1,4 +1,4 @@
-package com.stackoverflow.service;
+package com.stackoverflow.service.login;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

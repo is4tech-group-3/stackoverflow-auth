@@ -1,7 +1,7 @@
 services:
   db_postgres:
     image: postgres:latest
-    container_name: stackoverflow_postgres
+    container_name: postgres
     environment:
       POSTGRES_DB: stackoverflow
       POSTGRES_USER: root

@@ -1,6 +1,6 @@
 package com.stackoverflow.util;
 
-import com.stackoverflow.repository.user.UserRepository;
+import com.stackoverflow.repository.UserRepository;
 
 public class ValidationUtil {
 

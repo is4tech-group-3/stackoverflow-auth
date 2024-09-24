@@ -14,8 +14,8 @@ import com.stackoverflow.bo.User;
 import com.stackoverflow.dto.auth.LoginUserDto;
 import com.stackoverflow.dto.auth.RegisterUserDto;
 import com.stackoverflow.dto.responses.LoginResponse;
-import com.stackoverflow.service.AuthenticationService;
-import com.stackoverflow.service.JwtService;
+import com.stackoverflow.service.login.AuthenticationService;
+import com.stackoverflow.service.login.JwtService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.stackoverflow.service.JwtService;
+import com.stackoverflow.service.login.JwtService;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.stackoverflow.repository.user;
+package com.stackoverflow.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

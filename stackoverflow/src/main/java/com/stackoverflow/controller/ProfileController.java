@@ -1,4 +1,4 @@
-package com.stackoverflow.controller.profile;
+package com.stackoverflow.controller;
 
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.profile.ProfileDto;
