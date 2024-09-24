@@ -6,8 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.stackoverflow.bo.User;
-import com.stackoverflow.dto.LoginUserDto;
-import com.stackoverflow.dto.RegisterUserDto;
+import com.stackoverflow.dto.auth.LoginUserDto;
+import com.stackoverflow.dto.auth.RegisterUserDto;
 import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.ValidationUtil;
 
