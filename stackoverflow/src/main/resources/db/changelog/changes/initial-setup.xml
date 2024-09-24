@@ -4,8 +4,8 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="table_user" author="weslly">
-        <createTable tableName="user">
+    <changeSet id="table_users" author="weslly">
+        <createTable tableName="users">
             <column name="user_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
@@ -16,11 +16,7 @@
             </column>
             <column name="username" type="VARCHAR(50)"/>
             <column name="password" type="VARCHAR(512)"/>
-            <column name="age" type="SMALLINT"/>
-            <column name="dpi" type="BIGINT">
-                <constraints unique="true"/>
-            </column>
-            <column name="status" type="BOOLEAN"/>
+            <column name="status" type="BOOLEAN" defaultValueBoolean="true"/>
             <column name="created" type="TIMESTAMP"/>
             <column name="profile_id" type="BIGINT"/>
         </createTable>
@@ -53,14 +49,12 @@
             <column name="role_id" type="BIGINT"/>
             <column name="profile_id" type="BIGINT"/>
         </createTable>
-
-
     </changeSet>
 
     <changeSet id="foreign_keys" author="weslly">
         <!-- Llave foránea para profile_id hacia user -->
         <addForeignKeyConstraint baseColumnNames="profile_id"
-                                 baseTableName="user"
+                                 baseTableName="users"
                                  referencedColumnNames="profile_id"
                                  referencedTableName="profile"
                                  constraintName="profile_user" />
