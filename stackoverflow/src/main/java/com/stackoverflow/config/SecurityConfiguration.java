@@ -42,7 +42,7 @@ public class SecurityConfiguration {
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers("/forgotPassword").permitAll()
                         .requestMatchers("/changePassword").permitAll()
-                        .requestMatchers("/api/v1/profile/**").permitAll() // ! Solo es de prueba
+                        .requestMatchers("/api/v1/profile/**").permitAll() 
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
