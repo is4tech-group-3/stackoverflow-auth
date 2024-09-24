@@ -1,4 +1,4 @@
-package com.stackoverflow.repository.profile;
+package com.stackoverflow.repository;
 
 import com.stackoverflow.bo.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;

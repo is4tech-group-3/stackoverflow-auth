@@ -2,15 +2,19 @@ package com.stackoverflow.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleSecurityException(Exception exception) {
@@ -50,7 +54,10 @@ public class GlobalExceptionHandler {
             errorDetail.setProperty("description", "Unknown internal server error.");
         }
 
-        
+        if (exception instanceof EntityNotFoundException) {
+            errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(404), exception.getMessage());
+            errorDetail.setProperty("description", "The requested entity was not found");
+        }
 
         return errorDetail;
     }

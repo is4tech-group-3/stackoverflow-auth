@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.stackoverflow.bo.User;
-import com.stackoverflow.dto.LoginUserDto;
-import com.stackoverflow.dto.RegisterUserDto;
-import com.stackoverflow.responses.LoginResponse;
+import com.stackoverflow.dto.auth.LoginUserDto;
+import com.stackoverflow.dto.auth.RegisterUserDto;
+import com.stackoverflow.dto.responses.LoginResponse;
 import com.stackoverflow.service.AuthenticationService;
 import com.stackoverflow.service.JwtService;
 

@@ -23,7 +23,7 @@
     </changeSet>
 
     <changeSet id="table_profile" author="weslly">
-        <createTable tableName="profile">
+        <createTable tableName="profiles">
             <column name="profile_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
@@ -34,7 +34,7 @@
     </changeSet>
 
     <changeSet id="table_role" author="weslly">
-        <createTable tableName="role">
+        <createTable tableName="roles">
             <column name="role_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
@@ -56,20 +56,20 @@
         <addForeignKeyConstraint baseColumnNames="profile_id"
                                  baseTableName="users"
                                  referencedColumnNames="profile_id"
-                                 referencedTableName="profile"
-                                 constraintName="profile_user" />
+                                 referencedTableName="profiles"
+                                 constraintName="user_profile"/>
 
         <!-- Llaves foráneas para profile_role -->
         <addForeignKeyConstraint baseColumnNames="role_id"
                                  baseTableName="profile_role"
                                  referencedColumnNames="role_id"
-                                 referencedTableName="role"
-                                 constraintName="role_profile_role" />
+                                 referencedTableName="roles"
+                                 constraintName="profile_role_role"/>
 
         <addForeignKeyConstraint baseColumnNames="profile_id"
                                  baseTableName="profile_role"
                                  referencedColumnNames="profile_id"
-                                 referencedTableName="profile"
-                                 constraintName="profile_profile_role" />
+                                 referencedTableName="profiles"
+                                 constraintName="profile_role_user"/>
     </changeSet>
 </databaseChangeLog>
