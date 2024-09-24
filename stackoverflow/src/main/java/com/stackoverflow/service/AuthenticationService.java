@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.stackoverflow.bo.User;
-import com.stackoverflow.dto.LoginUserDto;
-import com.stackoverflow.dto.RegisterUserDto;
-import com.stackoverflow.repository.user.UserRepository;
+
+import com.stackoverflow.dto.auth.LoginUserDto;
+import com.stackoverflow.dto.auth.RegisterUserDto;
+import com.stackoverflow.repository.UserRepository;
+
 import com.stackoverflow.util.ValidationUtil;
 
 @Service

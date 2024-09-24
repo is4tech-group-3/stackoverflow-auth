@@ -5,10 +5,9 @@ import org.springframework.stereotype.Service;
 
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.profile.ProfileDto;
-import com.stackoverflow.repository.profile.ProfileRepository;
+import com.stackoverflow.repository.ProfileRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {

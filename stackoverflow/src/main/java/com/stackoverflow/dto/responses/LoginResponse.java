@@ -1,4 +1,4 @@
-package com.stackoverflow.responses;
+package com.stackoverflow.dto.responses;
 
 import lombok.Getter;
 import lombok.Setter;
