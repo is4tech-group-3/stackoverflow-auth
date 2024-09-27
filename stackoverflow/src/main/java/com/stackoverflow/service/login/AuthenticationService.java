@@ -1,6 +1,10 @@
 package com.stackoverflow.service.login;
 
-import lombok.AllArgsConstructor;
+import com.stackoverflow.service.MailService;
+import com.stackoverflow.util.LoggerUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,11 +18,12 @@ import com.stackoverflow.repository.UserRepository;
 
 import com.stackoverflow.util.ValidationUtil;
 
+import java.security.SecureRandom;
+
 @Service
-@AllArgsConstructor
 public class AuthenticationService {
 
-    @Autowired 
+    @Autowired
     private MailService mailService;
 
     @Autowired
