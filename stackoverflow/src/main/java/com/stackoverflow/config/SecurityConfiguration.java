@@ -40,11 +40,13 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .requestMatchers("/forgotPassword").permitAll()
-                        .requestMatchers("/changePassword").permitAll()
+                        .requestMatchers("/api/v1/auth/signup").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/api/v1/auth/forgotPassword").permitAll()
+                        .requestMatchers("/api/v1/auth/changePassword").permitAll()
                         .requestMatchers("/api/v1/role/**").permitAll()
                         .requestMatchers("/api/v1/profile/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v1/user/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
