@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07bcbe92-53ae-42c2-acbb-6bcb96f194f4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/stackoverflow-api.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/MainApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/MainApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/resources/db/changelog/changes/auth.xml" beforeDir="false" afterPath="$PROJECT_DIR$/stackoverflow/src/main/resources/db/changelog/changes/auth.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/service/login/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/service/login/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/stackoverflow/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,9 +29,9 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.MainApplication.executor": "Run",
-    "git-widget-placeholder": "dev",
+    "git-widget-placeholder": "feature/email-structure",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/zgit/Prácticas/stackoverflow-auth/stackoverflow",
+    "last_opened_file_path": "C:/Users/LENOVO/Desktop/REPOSITORIO/stackoverflow-auth/stackoverflow",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,19 +54,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="stackoverflow-auth" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="stackoverflow-auth" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="stackoverflow-auth" />
       <option name="ENV_FILES" value="" />
@@ -111,14 +90,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
-    </configuration>
-    <configuration name="MainApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="stackoverflow" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.stackoverflow.MainApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <module name="stackoverflow-auth" />
@@ -167,14 +138,14 @@
       <option name="docutils_open_in_browser" value="false" />
       <method v="2" />
     </configuration>
-  </component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.22855.74" />
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.22855.74" />
-      </set>
-    </attachedChunks>
+    <configuration name="MainApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="stackoverflow" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.stackoverflow.MainApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
