@@ -55,7 +55,7 @@
 
     <changeSet id="table_publication" author="weslly">
         <createTable tableName="publications">
-            <column name="publication_id" type="BIGINT">
+            <column name="publication_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="title" type="VARCHAR(50)"/>
@@ -68,7 +68,7 @@
 
     <changeSet id="table_tag" author="weslly">
         <createTable tableName="tags">
-            <column name="tag_id" type="BIGINT">
+            <column name="tag_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="name" type="VARCHAR(15)"/>
@@ -79,7 +79,7 @@
 
     <changeSet id="table" author="weslly">
         <createTable tableName="comments">
-            <column name="comment_id" type="BIGINT">
+            <column name="comment_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="description" type="VARCHAR(255)"/>
@@ -92,7 +92,7 @@
 
     <changeSet id="table_question" author="weslly">
         <createTable tableName="questions">
-            <column name="question_id" type="BIGINT">
+            <column name="question_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="title" type="VARCHAR(50)"/>
@@ -105,7 +105,7 @@
 
     <changeSet id="table_answer" author="weslly">
         <createTable tableName="answers">
-            <column name="answer_id" type="BIGINT">
+            <column name="answer_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="description" type="VARCHAR(255)"/>
@@ -120,8 +120,8 @@
 
     <changeSet id="detail_question_tag" author="weslly">
         <createTable tableName="question_tag">
-            <column name="tag_id" type="BIGINT">
-                <constraints nullable="false"/>
+            <column name="tag_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="question_id" type="BIGINT">
                 <constraints nullable="false"/>
@@ -131,8 +131,8 @@
 
     <changeSet id="detail_publication_tag" author="weslly">
         <createTable tableName="publication_tag">
-            <column name="tag_id" type="BIGINT">
-                <constraints nullable="false"/>
+            <column name="tag_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="publication_id" type="BIGINT">
                 <constraints nullable="false"/>
