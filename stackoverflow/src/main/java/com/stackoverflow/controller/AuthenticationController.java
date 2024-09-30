@@ -13,6 +13,8 @@ import com.stackoverflow.dto.responses.LoginResponse;
 import com.stackoverflow.service.login.AuthenticationService;
 import com.stackoverflow.service.login.JwtService;
 
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -35,11 +37,24 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.login(loginUserDto);
 
-        String jwtToken = jwtService.generateToken(authenticatedUser);
+        //Obtener los roles del usuario
+        List<String> roles = authenticationService.getUserRoles(authenticatedUser);
 
+        //Generar el token con los roles
+        String jwtToken = jwtService.generateToken(
+                new org.springframework.security.core.userdetails.User(
+                        authenticatedUser.getEmail(),
+                        authenticatedUser.getPassword(),
+                        Collections.emptyList()
+                ),
+                roles
+        );
+
+        //Crear la respuesta        
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
+        loginResponse.setRoles(roles);
 
         return ResponseEntity.ok(loginResponse);
     }

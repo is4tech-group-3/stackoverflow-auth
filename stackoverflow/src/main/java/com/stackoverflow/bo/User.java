@@ -54,6 +54,9 @@ public class User implements UserDetails {
     @Column(updatable = false, name = "created")
     private LocalDate created;
 
+    @Column(name = "profile_id")
+    private Long profileId;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
