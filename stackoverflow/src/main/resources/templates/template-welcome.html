@@ -1,0 +1,114 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support BugStack</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            background-color: #dedede;
+            font-family: "Roboto", sans-serif;
+        }
+
+        table {
+            border-spacing: 0;
+        }
+
+        td {
+            padding: 0;
+        }
+
+        img {
+            border: 0;
+            display: block;
+        }
+
+        .centered-text {
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }
+
+        /* Fallback for email clients with poor CSS support */
+        .image-wrapper {
+            position: relative;
+            text-align: center;
+            background-color: black;
+        }
+
+        .image-text-overlay {
+            position: relative;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            color: white;
+            font-size: 24px;
+        }
+
+    </style>
+</head>
+
+<body>
+<center class="wrapper" style="width: 100%; table-layout: fixed; background-color: #dedede;">
+    <table class="main" width="100%"
+           style="background-color: #fff; margin: 0 auto; max-width: 600px; border-spacing: 0; color: #272727;">
+        <tr>
+            <td>
+                <table width="100%" style="background-color: #272727;">
+                    <tr>
+                        <td>
+                            <a href="#"><img src="cid:Logo" alt="BugStack Logo" width="180"
+                                             title="BugStack Logo" style="padding: 10px;"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="image-wrapper">
+                            <img src="cid:Fondo-Bugstack" alt="Fondo" width="600" height="250" style="display: block; width: 100%;">
+                            <div class="image-text-overlay">Saludos, habitante de BugStack!</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- Aquí va el contenido del correo principal -->
+        <tr>
+            <td style="padding: 10px 20px; text-align: center;">
+                <p>Hola, ${nameUser}</p>
+                <p>Estamos emocionados de tenerte aquí. Tu cuenta ha sido creada exitosamente, y estamos listos para que empieces a explorar todas las funcionalidades que ofrecemos.</p>
+                <h2 style="font-size: 14px; color: #333; margin: 10px 0;">Aquí está tu contraseña:</h2>
+                <div
+                        style="background-color: #f7f7f7; border-radius: 5px; padding: 10px; text-align: center; display: inline-block; width: auto; margin: 10px 0;">
+                    <p style="font-size: 24px; font-weight: bold; margin: 0;">${password}</p>
+                </div>
+                <p style="font-size: 14px; color: #333; margin: 10px 0;">¡Importante! Te recomendamos que cambies tu contraseña en cuanto inicies sesión para asegurar la seguridad de tu cuenta.</p>
+
+                <a href="#"
+                   style="background-color: #30475E; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 14px; display: block; width: calc(100% - 40px); margin: 0 auto;">
+                    Iniciar sesión
+                </a>
+            </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+            <td style="padding: 20px; background-color: #f1f1f1; text-align: center;">
+                <p style="font-size: 12px; color: #999999; text-align: center; line-height: 1.5;">from</p>
+                <img src="cid:LogoBlack" alt="BugStack Logo" width="100" title="BugStack Logo">
+                <p style="font-size: 12px; color: #999999; text-align: center; line-height: 1.5;">
+                    © BugStack., Attention: Community Support,<br>
+                    Este mensaje se envió a <a href="#" style="color: #1877f2;">batreshermes1@gmail.com</a><br>
+                    A fin de proteger tu cuenta, no reenvíes este correo electrónico. <a href="#"
+                                                                                         style="color: #1877f2;">Más información</a>.
+                </p>
+            </td>
+        </tr>
+    </table>
+</center>
+</body>
+
+</html>
