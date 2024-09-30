@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @Builder
 @Entity
-@Table(name = "profile")
+@Table(name = "profiles")
 public class Profile implements Serializable{
     @Id
     @Column(name = "profile_id")

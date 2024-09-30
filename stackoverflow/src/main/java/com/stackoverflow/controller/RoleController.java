@@ -3,24 +3,31 @@ package com.stackoverflow.controller;
 import com.stackoverflow.bo.Role;
 import com.stackoverflow.dto.role.RoleRequest;
 import com.stackoverflow.service.role.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.stackoverflow.util.AuditRequest;
+import lombok.AllArgsConstructor;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/role")
 public class RoleController {
 
-    @Autowired
     private RoleService roleService;
+    private AuditRequest auditRequest;
 
     @PostMapping
     public ResponseEntity<Role> createRole(@RequestBody RoleRequest roleRequest) {
         Role role = roleService.createRole(roleRequest);
+        auditRequest.auditPost(
+                "Role", "POST",
+                roleRequest, "OK",
+                HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(),
+                "Default", 1L
+        );
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
