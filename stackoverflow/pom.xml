@@ -103,12 +103,12 @@
       		<groupId>org.springframework.boot</groupId>
       		<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
+		<!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-			<version>3.3.3</version>
-		</dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.33</version>
+		</dependency>	
 	</dependencies>
 
 	<build>

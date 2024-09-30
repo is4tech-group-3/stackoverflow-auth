@@ -70,11 +70,8 @@ public class AuthenticationService {
         ValidationUtil.validateNotEmpty(input.getUsername(), "Username");
 
         String password = generatePassword();
-
         ValidationUtil.validationEmailFormat(input.getEmail());
-
         ValidationUtil.validateUniqueEmail(userRepository, input.getEmail());
-
         ValidationUtil.validatePassword(password);
 
         User user = new User();
@@ -86,10 +83,9 @@ public class AuthenticationService {
         user.setStatus(true);
 
         String to = input.getEmail();
-        String subject = "Bienvenido a la familia BUGSTACK " + input.getName();
-        String body = "Hola " + input.getName() +", tu cuenta ha sido creada exitosamente. Tu contraseña es: " + password;
+        String nameUser = input.getName();
 
-        mailService.sendMail(to, subject, body);
+        mailService.sendEmailWelcome(to, password, nameUser);
 
         LoggerUtil.loggerInfo(request, HttpStatus.CREATED, "Usuario registrado");
 
