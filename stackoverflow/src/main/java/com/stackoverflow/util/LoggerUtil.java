@@ -27,4 +27,8 @@ public class LoggerUtil {
         String addressIp = request.getRemoteAddr();
         logger.error("AddressIp: {}, Status: {}, Message: {}", addressIp, status.value(), message);
     }
+
+    public static void loggerDebug(String message){
+        logger.info(message);
+    }
 }
