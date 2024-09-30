@@ -3,6 +3,7 @@ package com.stackoverflow.service.login;
 import com.stackoverflow.service.MailService;
 import com.stackoverflow.util.LoggerUtil;
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,15 +11,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.stackoverflow.bo.Role;
 import com.stackoverflow.bo.User;
 
 import com.stackoverflow.dto.auth.LoginUserDto;
 import com.stackoverflow.dto.auth.RegisterUserDto;
+import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
 
 import com.stackoverflow.util.ValidationUtil;
 
 import java.security.SecureRandom;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
@@ -28,6 +33,9 @@ public class AuthenticationService {
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -42,7 +50,7 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String generatePassword(){
+    public String generatePassword() {
         final String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         final String lowerCase = "abcdefghijklmnopqrstuvwxyz";
         final String digits = "0123456789";
@@ -62,7 +70,7 @@ public class AuthenticationService {
         }
         return pass.toString();
     }
-  
+
     public User signup(RegisterUserDto input) {
         ValidationUtil.validateNotEmpty(input.getName(), "Name");
         ValidationUtil.validateNotEmpty(input.getSurname(), "Surname");
@@ -97,13 +105,22 @@ public class AuthenticationService {
         ValidationUtil.validateNotEmpty(input.getPassword(), "Password");
 
         ValidationUtil.validationEmailFormat(input.getEmail());
-    
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),
                         input.getPassword()));
-    
+
         return userRepository.findByEmail(input.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    public List<String> getUserRoles(User user) {
+        return profileRepository.findById(user.getProfileId())
+                .map(profile -> profile.getRoles().stream()
+                        .map(Role::getName)
+                        .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+    }
+
 }
