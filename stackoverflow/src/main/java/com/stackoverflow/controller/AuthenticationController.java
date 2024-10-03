@@ -1,5 +1,6 @@
 package com.stackoverflow.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,16 +17,13 @@ import com.stackoverflow.service.login.JwtService;
 import java.util.Collections;
 import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
+
     private final JwtService jwtService;
     private final AuthenticationService authenticationService;
-
-    public AuthenticationController(JwtService jwtService, AuthenticationService authenticationService) {
-        this.jwtService = jwtService;
-        this.authenticationService = authenticationService;
-    }
 
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
