@@ -236,4 +236,44 @@
                                  referencedTableName="tags"
                                  referencedColumnNames="tag_id"/>
     </changeSet>
+
+    <changeSet id="insert_profiles" author="lester">
+        <insert tableName="profiles">
+            <column name="name" value="USER" />
+            <column name="description" value="Regular user profile" />
+            <column name="status" valueBoolean="true" />
+        </insert>
+        <insert tableName="profiles">
+            <column name="name" value="ADMIN" />
+            <column name="description" value="Super user" />
+            <column name="status" valueBoolean="true" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_users" author="lester">
+        <!--USER-->
+        <insert tableName="users">
+            <column name="name" value="Henry" />
+            <column name="surname" value="Hernández" />
+            <column name="email" value="hhernandez@gmail.com" />
+            <column name="username" value="hhernandez" />
+            <column name="password" value="Hhernandez7$" />
+            <column name="status" valueBoolean="true" />
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="profile_id" valueNumeric="1" />
+        </insert>
+
+        <!--ADMIN-->
+        <insert tableName="users">
+            <column name="name" value="Noelia" />
+            <column name="surname" value="Pazos" />
+            <column name="email" value="npazos@gmail.com" />
+            <column name="username" value="npazos" />
+            <column name="password" value="Npazos7@" />
+            <column name="status" valueBoolean="true" />
+            <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="profile_id" valueNumeric="2" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

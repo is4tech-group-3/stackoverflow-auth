@@ -37,10 +37,8 @@ public class AuthenticationController {
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.login(loginUserDto);
 
-        //Obtener los roles del usuario
         List<String> roles = authenticationService.getUserRoles(authenticatedUser);
 
-        //Generar el token con los roles
         String jwtToken = jwtService.generateToken(
                 new org.springframework.security.core.userdetails.User(
                         authenticatedUser.getEmail(),
@@ -50,7 +48,6 @@ public class AuthenticationController {
                 roles
         );
 
-        //Crear la respuesta        
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
