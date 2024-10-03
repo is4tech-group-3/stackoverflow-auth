@@ -14,4 +14,6 @@ public interface ProfileService {
     boolean existsById(Long idProfile);
     
     List<Profile> findAll();
+
+    Profile updateStatusProfile(Long id);
 }

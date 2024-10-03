@@ -1,5 +1,6 @@
 package com.stackoverflow.service.profile;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,7 @@ import com.stackoverflow.dto.profile.ProfileDto;
 import com.stackoverflow.repository.ProfileRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -44,5 +46,16 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public List<Profile> findAll() {
         return profileRepository.findAll(); 
+    }
+
+    @Override
+    public Profile updateStatusProfile(Long id) {
+        Optional<Profile> profileFound = profileRepository.findById(id);
+        if(profileFound.isEmpty()){
+            throw new EntityNotFoundException("Profile not found");
+        }
+        Profile profile = profileFound.get();
+        profile.setStatus(!profile.getStatus());
+        return profileRepository.save(profile);
     }
 }

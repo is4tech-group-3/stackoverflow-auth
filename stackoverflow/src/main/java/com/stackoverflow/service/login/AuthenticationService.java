@@ -20,6 +20,7 @@ import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
 
 import com.stackoverflow.util.ValidationUtil;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
 import java.util.*;

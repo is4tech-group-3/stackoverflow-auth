@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07bcbe92-53ae-42c2-acbb-6bcb96f194f4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/bo/Question.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/controller/QuestionController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/dto/question/QuestionDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/repository/QuestionRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/service/question/QuestionService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stackoverflow/src/main/java/com/stackoverflow/service/question/QuestionServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,9 +27,9 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.MainApplication.executor": "Run",
-    "git-widget-placeholder": "feature/add-crud-question",
+    "git-widget-placeholder": "fix/access-error",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/LENOVO/Desktop/IS4TECH/STACKOVERFLOW/stackoverflow-auth",
+    "last_opened_file_path": "C:/Users/LENOVO/Desktop/IS4TECH/STACKOVERFLOW/stackoverflow-auth/stackoverflow",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",

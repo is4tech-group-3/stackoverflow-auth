@@ -1,8 +1,13 @@
 package com.stackoverflow.controller;
 
-import com.stackoverflow.bo.User;
+import com.stackoverflow.dto.ChangePasswordCodeDto;
+import com.stackoverflow.dto.CodeVerificationDto;
+import com.stackoverflow.dto.EmailDto;
+import com.stackoverflow.dto.user.PasswordUpdate;
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
+import com.stackoverflow.service.login.AuthenticationService;
+import com.stackoverflow.service.recoverypassword.CodeVerificationService;
 import com.stackoverflow.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +22,9 @@ import java.util.Optional;
 @RequestMapping("/api/v1/user")
 public class UserController {
 
+    private final AuthenticationService authenticationService;
     private final UserService userService;
+    private final CodeVerificationService codeVerificationService;
 
     @GetMapping()
     public ResponseEntity<List<UserResponse>> getAllUsers() {
@@ -46,5 +53,29 @@ public class UserController {
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequestUpdate userRequestUpdate) {
         UserResponse updateUser = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(updateUser);
+    }
+
+    @PatchMapping("/passwordChange/{id}")
+    public  ResponseEntity<Void> changePassword(@PathVariable(name = "id") Long id, @RequestBody PasswordUpdate passwordUpdate){
+        userService.updatePassword(id, passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/password-recovery")
+    public ResponseEntity<String> passwordRecovery(@RequestBody EmailDto emailDto) {
+        codeVerificationService.sendCodeVerification(emailDto);
+        return ResponseEntity.ok("Se ha enviado el código de recuperación.");
+    }
+
+    @PostMapping("/verify-code")
+    public ResponseEntity<String> verifyCode(@RequestBody CodeVerificationDto codeVerificationDto) {
+        codeVerificationService.verifyCode(codeVerificationDto);
+        return ResponseEntity.ok("Código verificado, puede proceder a cambiar la contraseña.");
+    }
+
+    @PatchMapping("/reset-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordCodeDto changePasswordCodeDto) {
+        codeVerificationService.changePassword(changePasswordCodeDto.getEmail(), changePasswordCodeDto.getNewPassword());
+        return ResponseEntity.ok("Contraseña cambiada exitosamente.");
     }
 }
