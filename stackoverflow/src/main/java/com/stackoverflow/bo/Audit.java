@@ -1,11 +1,15 @@
 package com.stackoverflow.bo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class Audit {
@@ -20,7 +24,7 @@ public class Audit {
     private String statusDescription;
     @JsonProperty("date_operation")
     private Date dateOperation;
-    private String username;
+    private String email;
     @JsonProperty("user_id")
     private Long userId;
 }
