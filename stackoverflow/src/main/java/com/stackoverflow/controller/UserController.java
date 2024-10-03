@@ -1,15 +1,19 @@
 package com.stackoverflow.controller;
 
+<<<<<<< HEAD
 import com.stackoverflow.dto.ChangePasswordCodeDto;
 import com.stackoverflow.dto.CodeVerificationDto;
 import com.stackoverflow.dto.EmailDto;
 import com.stackoverflow.dto.user.PasswordUpdate;
+=======
+>>>>>>> 55e351d1a6d2ab1fa997695626f2a92adfcbaed9
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
 import com.stackoverflow.service.login.AuthenticationService;
 import com.stackoverflow.service.recoverypassword.CodeVerificationService;
 import com.stackoverflow.service.user.UserService;
-import lombok.RequiredArgsConstructor;
+import com.stackoverflow.util.AuditAnnotation;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/api/v1/user")
 public class UserController {
 
@@ -26,12 +30,16 @@ public class UserController {
     private final UserService userService;
     private final CodeVerificationService codeVerificationService;
 
-    @GetMapping()
+    private final String ENTITY_NAME = "USER";
+
+    @AuditAnnotation(ENTITY_NAME)
+    @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         Optional<UserResponse> user = userService.getUserById(id);
@@ -43,12 +51,14 @@ public class UserController {
         }
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequestUpdate userRequestUpdate) {
         UserResponse updateUser = userService.updateUser(id, userRequestUpdate);

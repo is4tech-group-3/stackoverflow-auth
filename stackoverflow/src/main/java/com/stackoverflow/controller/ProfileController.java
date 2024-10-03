@@ -3,21 +3,31 @@ package com.stackoverflow.controller;
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.profile.ProfileDto;
 import com.stackoverflow.service.profile.ProfileService;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+=======
+import com.stackoverflow.util.AuditAnnotation;
+import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.RequestBody;
+>>>>>>> 55e351d1a6d2ab1fa997695626f2a92adfcbaed9
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/v1/profile")
 public class ProfileController {
 
-    @Autowired
-    private ProfileService profileService;
+    private final ProfileService profileService;
 
+    private final String ENTITY_NAME = "PROFILE";
+
+    @AuditAnnotation(ENTITY_NAME)
     @PostMapping
     public ResponseEntity<ProfileDto> create(@RequestBody ProfileDto profileDto) {
         try {
@@ -34,6 +44,7 @@ public class ProfileController {
         }
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @PutMapping("/{id}")
     public ResponseEntity<ProfileDto> update(@RequestBody ProfileDto profileDto, @PathVariable Long id) {
         try {
@@ -57,6 +68,7 @@ public class ProfileController {
         }
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
@@ -72,6 +84,7 @@ public class ProfileController {
         }
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @GetMapping("/{id}")
     public ResponseEntity<ProfileDto> findById(@PathVariable Long id) {
         try {
@@ -87,11 +100,12 @@ public class ProfileController {
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-} catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @GetMapping()
     public ResponseEntity<List<ProfileDto>> listAll() {
         try {
@@ -109,6 +123,7 @@ public class ProfileController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+<<<<<<< HEAD
 
     @PatchMapping("/{id}")
     public ResponseEntity<Profile> updateStatus(@PathVariable(name = "id") Long id){
@@ -116,4 +131,6 @@ public class ProfileController {
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
+=======
+>>>>>>> 55e351d1a6d2ab1fa997695626f2a92adfcbaed9
 }
