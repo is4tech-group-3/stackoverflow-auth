@@ -21,7 +21,7 @@ public class SwaggerConfig {
 
     @Bean
     OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("API Seguridad Token").version("API version"))
+        return new OpenAPI().info(new Info().title("stackoverflow-auth").version("API version"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components().addSecuritySchemes("bearerAuth", 
                     new SecurityScheme()

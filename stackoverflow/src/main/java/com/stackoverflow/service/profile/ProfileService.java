@@ -1,19 +1,20 @@
 package com.stackoverflow.service.profile;
 
 import com.stackoverflow.bo.Profile;
-import com.stackoverflow.dto.profile.ProfileDto;
+import com.stackoverflow.dto.profile.ProfileRequest;
+
 import java.util.List;
 
 public interface ProfileService {
-    Profile save(ProfileDto profile);
+    Profile createProfile(ProfileRequest profileRequest);
 
-    Profile findById(Long idProfile);
+    List<Profile> getProfiles();
 
-    void delete(Profile profile);
+    Profile findProfileById(Long idProfile);
 
-    boolean existsById(Long idProfile);
-    
-    List<Profile> findAll();
+    Profile updateProfile(Long idProfile, ProfileRequest profileRequest);
 
-    Profile updateStatusProfile(Long id);
+    void deleteProfile(Long idProfile);
+
+    Profile changeStatusProfile(Long idProfile);
 }

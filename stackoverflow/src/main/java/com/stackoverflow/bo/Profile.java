@@ -1,7 +1,7 @@
 package com.stackoverflow.bo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -48,5 +48,5 @@ public class Profile implements Serializable{
             joinColumns = @JoinColumn(name = "profile_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private Set<Role> roles;
 }

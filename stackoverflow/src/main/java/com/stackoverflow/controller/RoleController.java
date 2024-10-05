@@ -4,13 +4,11 @@ import com.stackoverflow.bo.Role;
 import com.stackoverflow.dto.role.RoleRequest;
 import com.stackoverflow.service.role.RoleService;
 import com.stackoverflow.util.AuditAnnotation;
-import com.stackoverflow.util.LoggerUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -31,36 +29,35 @@ public class RoleController {
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping
     public ResponseEntity<List<Role>> getRoles() {
-        List<Role> role = roleService.getAllRoles();
-        LoggerUtil.loggerDebug("Reques body en controlador getRoles");
+        List<Role> role = roleService.getRoles();
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping("/{id}")
-    public ResponseEntity<Role> getRole(@PathVariable(name = "id") Long id) {
-        Optional<Role> roleFound = roleService.findRoleById(id);
-        return new ResponseEntity<>(roleFound.get(), HttpStatus.OK);
+    public ResponseEntity<Role> findRoleById(@PathVariable(name = "id") Long idRole) {
+        Role role = roleService.findRoleById(idRole);
+        return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
     @AuditAnnotation(ENTITY_NAME)
     @PutMapping("/{id}")
-    public ResponseEntity<Role> updateRole(@PathVariable(name = "id") Long id, @RequestBody RoleRequest roleRequest) {
-        Role role = roleService.updateRole(id, roleRequest);
+    public ResponseEntity<Role> updateRole(@PathVariable(name = "id") Long idRole, @RequestBody RoleRequest roleRequest) {
+        Role role = roleService.updateRole(idRole, roleRequest);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
     @AuditAnnotation(ENTITY_NAME)
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRole(@PathVariable(name = "id") Long id) {
-        roleService.deleteRole(id);
+    public ResponseEntity<String> deleteRole(@PathVariable(name = "id") Long idRole) {
+        roleService.deleteRole(idRole);
         return new ResponseEntity<>("Role deleted successfully", HttpStatus.OK);
     }
 
     @AuditAnnotation(ENTITY_NAME)
     @PatchMapping("/{id}")
-    public ResponseEntity<Role> patchRole(@PathVariable(name = "id") Long id) {
-        Role role = roleService.updateStatusRole(id);
+    public ResponseEntity<Role> changeStatusRole(@PathVariable(name = "id") Long idRole) {
+        Role role = roleService.changeStatusRole(idRole);
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 }

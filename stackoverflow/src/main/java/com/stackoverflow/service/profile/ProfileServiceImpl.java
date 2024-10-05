@@ -1,60 +1,70 @@
 package com.stackoverflow.service.profile;
 
+import com.stackoverflow.bo.Role;
+import com.stackoverflow.dto.profile.ProfileRequest;
+import com.stackoverflow.repository.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.stackoverflow.bo.Profile;
-import com.stackoverflow.dto.profile.ProfileDto;
 import com.stackoverflow.repository.ProfileRepository;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
+@AllArgsConstructor
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
-    @Autowired
+    private final RoleRepository roleRepository;
     private ProfileRepository profileRepository;
 
     @Override
-    public Profile save(ProfileDto profileDto) {
+    public Profile createProfile(ProfileRequest profileRequest) {
+        Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         Profile profile = Profile.builder()
-                .idProfile(profileDto.getIdProfile())
-                .name(profileDto.getName())
-                .description(profileDto.getDescription())
-                .status(profileDto.getStatus())
+                .name(profileRequest.getName())
+                .description(profileRequest.getDescription())
+                .status(true)
+                .roles(roles)
                 .build();
         return profileRepository.save(profile);
     }
 
     @Override
-    public Profile findById(Long idProfile) {
-        return profileRepository.findById(idProfile).orElse(null);
+    public List<Profile> getProfiles() {
+        return profileRepository.findAll();
     }
 
     @Override
-    public void delete(Profile profile) {
-        profileRepository.delete(profile);
+    public Profile findProfileById(Long idProfile) {
+        return profileRepository.findById(idProfile)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + idProfile));
     }
 
     @Override
-    public boolean existsById(Long idProfile) {
-        return profileRepository.existsById(idProfile);
+    public Profile updateProfile(Long idProfile, ProfileRequest profileRequest) {
+        Profile profile = profileRepository.findById(idProfile)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + idProfile));
+        Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
+        profile.setName(profileRequest.getName());
+        profile.setDescription(profileRequest.getDescription());
+        profile.setRoles(roles);
+        return profileRepository.save(profile);
     }
 
     @Override
-    public List<Profile> findAll() {
-        return profileRepository.findAll(); 
+    public void deleteProfile(Long idProfile) {
+        profileRepository.deleteById(idProfile);
     }
 
+
     @Override
-    public Profile updateStatusProfile(Long id) {
-        Optional<Profile> profileFound = profileRepository.findById(id);
-        if(profileFound.isEmpty()){
-            throw new EntityNotFoundException("Profile not found");
-        }
-        Profile profile = profileFound.get();
+    public Profile changeStatusProfile(Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + id));
         profile.setStatus(!profile.getStatus());
         return profileRepository.save(profile);
     }
