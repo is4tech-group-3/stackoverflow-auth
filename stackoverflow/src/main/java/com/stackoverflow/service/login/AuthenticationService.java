@@ -1,5 +1,6 @@
 package com.stackoverflow.service.login;
 
+import com.stackoverflow.bo.Profile;
 import com.stackoverflow.service.MailService;
 import com.stackoverflow.util.LoggerUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
 
 import com.stackoverflow.util.ValidationUtil;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -89,6 +91,11 @@ public class AuthenticationService {
         user.setUsername(input.getUsername());
         user.setPassword(passwordEncoder.encode(password));
         user.setStatus(true);
+
+        Profile defaultProfile = profileRepository.findByName("USER")
+                .orElseThrow(() -> new RuntimeException("Default profile 'USER' not found."));
+
+        user.setProfileId(defaultProfile.getIdProfile());
 
         String to = input.getEmail();
         String nameUser = input.getName();

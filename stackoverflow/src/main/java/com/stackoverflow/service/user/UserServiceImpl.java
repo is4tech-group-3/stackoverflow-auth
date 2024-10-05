@@ -7,6 +7,7 @@ import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.UserConvert;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserConvert userConvert;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -39,9 +41,21 @@ public class UserServiceImpl implements UserService {
 
         user.setName(userRequestUpdate.getName());
         user.setSurname(userRequestUpdate.getSurname());
-        user.setEmail(userRequestUpdate.getEmail());
         user.setUsername(userRequestUpdate.getUsername());
 
         return userConvert.UserToUserResponse(userRepository.save(user));
+    }
+
+    @Override
+    public void updatePassword(Long id, String oldPassword, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if(!passwordEncoder.matches(oldPassword, user.getPassword())){
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }
