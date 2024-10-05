@@ -120,7 +120,7 @@
 
     <changeSet id="detail_question_tag" author="weslly">
         <createTable tableName="question_tag">
-            <column name="tag_id" type="BIGINT" autoIncrement="true">
+            <column name="tag_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="question_id" type="BIGINT">
@@ -131,7 +131,7 @@
 
     <changeSet id="detail_publication_tag" author="weslly">
         <createTable tableName="publication_tag">
-            <column name="tag_id" type="BIGINT" autoIncrement="true">
+            <column name="tag_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="publication_id" type="BIGINT">
