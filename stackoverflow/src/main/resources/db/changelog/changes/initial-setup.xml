@@ -239,40 +239,354 @@
 
     <changeSet id="insert_profiles" author="lester">
         <insert tableName="profiles">
-            <column name="name" value="USER" />
-            <column name="description" value="Regular user profile" />
-            <column name="status" valueBoolean="true" />
+            <column name="name" value="USER"/>
+            <column name="description" value="permissions to interact with public features"/>
+            <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="profiles">
-            <column name="name" value="ADMIN" />
-            <column name="description" value="Super user" />
-            <column name="status" valueBoolean="true" />
+            <column name="name" value="ADMIN"/>
+            <column name="description" value="full system access, administration and configs"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="profiles">
+            <column name="name" value="AUDIT"/>
+            <column name="description" value="access monitoring and review of system activities"/>
+            <column name="status" valueBoolean="true"/>
         </insert>
     </changeSet>
 
     <changeSet id="insert_users" author="lester">
-        <!--USER-->
         <insert tableName="users">
-            <column name="name" value="Henry" />
-            <column name="surname" value="Hernández" />
-            <column name="email" value="hhernandez@gmail.com" />
-            <column name="username" value="hhernandez" />
-            <column name="password" value="Hhernandez7$" />
-            <column name="status" valueBoolean="true" />
+            <column name="name" value="Henry"/>
+            <column name="surname" value="Hernández"/>
+            <column name="email" value="hhernandez@gmail.com"/>
+            <column name="username" value="hhernandez"/>
+            <column name="password" value="Hhernandez7$"/>
+            <column name="status" valueBoolean="true"/>
             <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="profile_id" valueNumeric="1" />
+            <column name="profile_id" valueNumeric="1"/>
         </insert>
-
-        <!--ADMIN-->
         <insert tableName="users">
-            <column name="name" value="Noelia" />
-            <column name="surname" value="Pazos" />
-            <column name="email" value="npazos@gmail.com" />
-            <column name="username" value="npazos" />
-            <column name="password" value="Npazos7@" />
-            <column name="status" valueBoolean="true" />
+            <column name="name" value="Noelia"/>
+            <column name="surname" value="Pazos"/>
+            <column name="email" value="npazos@gmail.com"/>
+            <column name="username" value="npazos"/>
+            <column name="password" value="Npazos7@"/>
+            <column name="status" valueBoolean="true"/>
             <column name="created" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="profile_id" valueNumeric="2" />
+            <column name="profile_id" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_roles" author="weslly">
+        <insert tableName="roles">
+            <column name="name" value="USER"/>
+            <column name="description" value="role to access USER services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="PROFILE"/>
+            <column name="description" value="role to access PROFILE services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE"/>
+            <column name="description" value="role to access ROLE services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="QUESTION"/>
+            <column name="description" value="role to access QUESTION services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="RESPONSE"/>
+            <column name="description" value="role to access RESPONSE services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="PUBLICATION"/>
+            <column name="description" value="role to access PUBLICATION services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="COMMENT"/>
+            <column name="description" value="role to access COMMENT services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="TAG"/>
+            <column name="description" value="role to access TAG services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="AUDIT"/>
+            <column name="description" value="role to access AUDIT services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_profile_role" author="weslly">
+        <insert tableName="profile_role">
+            <column name="profile_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="1"/>
+            <column name="role_id" value="4"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="1"/>
+            <column name="role_id" value="5"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="1"/>
+            <column name="role_id" value="6"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="1"/>
+            <column name="role_id" value="7"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="1"/>
+            <column name="role_id" value="8"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="2"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="3"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="4"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="5"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="6"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="7"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="8"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="9"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="3"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="3"/>
+            <column name="role_id" value="9"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_tags" author="weslly">
+        <insert tableName="tags">
+            <column name="name" value="JAVASCRIPT"/>
+            <column name="description" value="Dynamic language for web"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="TYPESCRIPT"/>
+            <column name="description" value="JS with static typing"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="JAVA"/>
+            <column name="description" value="Object-oriented language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="PYTHON"/>
+            <column name="description" value="Popular versatile language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="C"/>
+            <column name="description" value="Low-level programming language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="C++"/>
+            <column name="description" value="C with object-oriented feature"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="C#"/>
+            <column name="description" value="Microsoft's OO language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="GO"/>
+            <column name="description" value="Google's system language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="PHP"/>
+            <column name="description" value="Server-side scripting"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="RUBY"/>
+            <column name="description" value="Dynamic language for web apps"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="SWIFT"/>
+            <column name="description" value="Apple's iOS language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="KOTLIN"/>
+            <column name="description" value="Modern language for Android"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="RUST"/>
+            <column name="description" value="Memory-safe systems language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="HTML"/>
+            <column name="description" value="Markup language for web"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="CSS"/>
+            <column name="description" value="Style sheet language"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="SASS"/>
+            <column name="description" value="CSS preprocessor"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="REACTJS"/>
+            <column name="description" value="JS library for UIs"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="ANGULAR"/>
+            <column name="description" value="Frontend framework with TS"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="VUEJS"/>
+            <column name="description" value="Progressive JS framework"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="SVELTE"/>
+            <column name="description" value="Reactive UI framework"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="NODEJS"/>
+            <column name="description" value="JavaScript runtime for backend"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="EXPRESSJS"/>
+            <column name="description" value="Minimalist Node.js framework"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="SPRINGBOOT"/>
+            <column name="description" value="Microservices framework"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="FLASK"/>
+            <column name="description" value="Python microframework for web"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="DJANGO"/>
+            <column name="description" value="Python web framework"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="MONGODB"/>
+            <column name="description" value="Scalable NoSQL database"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="POSTGRESQL"/>
+            <column name="description" value="Advanced relational database"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="MYSQL"/>
+            <column name="description" value="Popular relational database"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="DOCKER"/>
+            <column name="description" value="Lightweight containers"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="KUBERNETES"/>
+            <column name="description" value="Container orchestration"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="TERRAFORM"/>
+            <column name="description" value="Infrastructure as code"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="ANSIBLE"/>
+            <column name="description" value="Automation for IT operations"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="JWT"/>
+            <column name="description" value="Token-based authentication"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="GIT"/>
+            <column name="description" value="Version control system"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="GITHUB"/>
+            <column name="description" value="Git hosting platform"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="BITBUCKET"/>
+            <column name="description" value="Git and Mercurial hosting"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="JENKINS"/>
+            <column name="description" value="Automation server for CI/CD"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="tags">
+            <column name="name" value="NPM"/>
+            <column name="description" value="Package manager for Node.js"/>
+            <column name="status" valueBoolean="true"/>
         </insert>
     </changeSet>
 
