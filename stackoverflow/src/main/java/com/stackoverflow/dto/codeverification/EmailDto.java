@@ -1,4 +1,4 @@
-package com.stackoverflow.dto;
+package com.stackoverflow.dto.codeverification;
 
 import lombok.Data;
 

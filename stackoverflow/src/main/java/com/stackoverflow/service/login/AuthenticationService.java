@@ -102,7 +102,7 @@ public class AuthenticationService {
 
         mailService.sendEmailWelcome(to, password, nameUser);
 
-        LoggerUtil.loggerInfo(request, HttpStatus.CREATED, "Usuario registrado");
+        LoggerUtil.loggerInfo(request, HttpStatus.CREATED, "Registered user");
 
         return userRepository.save(user);
     }

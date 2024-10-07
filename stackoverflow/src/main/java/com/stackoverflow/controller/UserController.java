@@ -1,8 +1,8 @@
 package com.stackoverflow.controller;
 
-import com.stackoverflow.dto.ChangePasswordCodeDto;
-import com.stackoverflow.dto.CodeVerificationDto;
-import com.stackoverflow.dto.EmailDto;
+import com.stackoverflow.dto.codeverification.EmailDto;
+import com.stackoverflow.dto.codeverification.PasswordResetDto;
+import com.stackoverflow.dto.codeverification.PasswordResponse;
 import com.stackoverflow.dto.user.PasswordUpdate;
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
@@ -17,7 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -33,7 +34,8 @@ public class UserController {
 
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping
-    public Page<UserResponse> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+    public Page<UserResponse> getAllUsers(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
         return userService.getAllUsers(page, size);
     }
 
@@ -51,39 +53,37 @@ public class UserController {
 
     @AuditAnnotation(ENTITY_NAME)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 
     @AuditAnnotation(ENTITY_NAME)
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequestUpdate userRequestUpdate) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
+            @RequestBody UserRequestUpdate userRequestUpdate) {
         UserResponse updateUser = userService.updateUser(id, userRequestUpdate);
         return ResponseEntity.ok(updateUser);
     }
 
     @PatchMapping("/passwordChange/{id}")
-    public  ResponseEntity<Void> changePassword(@PathVariable(name = "id") Long id, @RequestBody PasswordUpdate passwordUpdate){
+    public ResponseEntity<Void> changePassword(@PathVariable(name = "id") Long id,
+            @RequestBody PasswordUpdate passwordUpdate) {
         userService.updatePassword(id, passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/password-recovery")
-    public ResponseEntity<String> passwordRecovery(@RequestBody EmailDto emailDto) {
+    public ResponseEntity<PasswordResponse> passwordRecovery(@RequestBody EmailDto emailDto) {
         codeVerificationService.sendCodeVerification(emailDto);
-        return ResponseEntity.ok("Se ha enviado el código de recuperación.");
+        PasswordResponse response = new PasswordResponse("Recovery code successfully sent");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/verify-code")
-    public ResponseEntity<String> verifyCode(@RequestBody CodeVerificationDto codeVerificationDto) {
-        codeVerificationService.verifyCode(codeVerificationDto);
-        return ResponseEntity.ok("Código verificado, puede proceder a cambiar la contraseña.");
-    }
-
-    @PatchMapping("/reset-password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordCodeDto changePasswordCodeDto) {
-        codeVerificationService.changePassword(changePasswordCodeDto.getEmail(), changePasswordCodeDto.getNewPassword());
-        return ResponseEntity.ok("Contraseña cambiada exitosamente.");
+    @PatchMapping("/password-reset")
+    public ResponseEntity<PasswordResponse> resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
+        codeVerificationService.verifyCodeAndChangePassword(passwordResetDto);
+        PasswordResponse response = new PasswordResponse("Password has been updated correctly");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

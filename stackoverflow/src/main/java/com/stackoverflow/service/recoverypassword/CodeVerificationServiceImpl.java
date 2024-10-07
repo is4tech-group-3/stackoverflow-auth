@@ -2,8 +2,8 @@ package com.stackoverflow.service.recoverypassword;
 
 import com.stackoverflow.bo.CodeVerification;
 import com.stackoverflow.bo.User;
-import com.stackoverflow.dto.CodeVerificationDto;
-import com.stackoverflow.dto.EmailDto;
+import com.stackoverflow.dto.codeverification.EmailDto;
+import com.stackoverflow.dto.codeverification.PasswordResetDto;
 import com.stackoverflow.repository.CodeVerificationRepository;
 import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.service.MailService;
@@ -14,11 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import org.webjars.NotFoundException;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -68,25 +66,21 @@ public class CodeVerificationServiceImpl implements CodeVerificationService{
 
     @Override
     @Transactional
-    public void verifyCode(CodeVerificationDto codeVerificationDto) {
+    public void verifyCodeAndChangePassword(PasswordResetDto passwordResetDto) {
         CodeVerification codeVerification = codeVerificationRepository
-                .findByEmailAndCode(codeVerificationDto.getEmail(), codeVerificationDto.getCode())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código no válido"));
+                .findByEmailAndCode(passwordResetDto.getEmail(), passwordResetDto.getCode())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid code or email not found"));
 
         if (codeVerification.getDateExpiration().isBefore(LocalDateTime.now())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El código ha expirado");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Code expired");
         }
-    }
 
-    @Override
-    @Transactional
-    public void changePassword(String email, String newPassword) {
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(passwordResetDto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
         userRepository.save(user);
 
-        codeVerificationRepository.deleteByEmail(email);
+        codeVerificationRepository.deleteByEmail(passwordResetDto.getEmail());
     }
 }
