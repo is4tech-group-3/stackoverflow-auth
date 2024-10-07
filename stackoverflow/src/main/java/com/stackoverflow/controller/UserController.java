@@ -11,6 +11,8 @@ import com.stackoverflow.service.recoverypassword.CodeVerificationService;
 import com.stackoverflow.service.user.UserService;
 import com.stackoverflow.util.AuditAnnotation;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +33,8 @@ public class UserController {
 
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public Page<UserResponse> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+        return userService.getAllUsers(page, size);
     }
 
     @AuditAnnotation(ENTITY_NAME)

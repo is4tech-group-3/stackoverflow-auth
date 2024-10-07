@@ -3,12 +3,12 @@ package com.stackoverflow.service.profile;
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.profile.ProfileRequest;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ProfileService {
     Profile createProfile(ProfileRequest profileRequest);
 
-    List<Profile> getProfiles();
+    Page<Profile> getProfiles(int page, int size);
 
     Profile findProfileById(Long idProfile);
 

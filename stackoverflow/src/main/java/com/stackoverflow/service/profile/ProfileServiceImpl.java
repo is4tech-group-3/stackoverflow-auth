@@ -3,8 +3,14 @@ package com.stackoverflow.service.profile;
 import com.stackoverflow.bo.Role;
 import com.stackoverflow.dto.profile.ProfileRequest;
 import com.stackoverflow.repository.RoleRepository;
+import com.stackoverflow.util.ValidationUtil;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.stackoverflow.bo.Profile;
@@ -23,6 +29,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Profile createProfile(ProfileRequest profileRequest) {
+        ValidationUtil.validateNotEmpty(profileRequest.getName(), "Name");
+        ValidationUtil.validateNotEmpty(profileRequest.getDescription(), "Description");
+        
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         Profile profile = Profile.builder()
                 .name(profileRequest.getName())
@@ -34,8 +43,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public List<Profile> getProfiles() {
-        return profileRepository.findAll();
+    public Page<Profile> getProfiles(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return profileRepository.findAll(pageable);
     }
 
     @Override
@@ -48,6 +58,10 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile updateProfile(Long idProfile, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findById(idProfile)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + idProfile));
+
+        ValidationUtil.validateNotEmpty(profileRequest.getName(), "Name");
+        ValidationUtil.validateNotEmpty(profileRequest.getDescription(), "Description");
+
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         profile.setName(profileRequest.getName());
         profile.setDescription(profileRequest.getDescription());

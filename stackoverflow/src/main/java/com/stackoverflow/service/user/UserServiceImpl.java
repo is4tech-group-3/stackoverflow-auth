@@ -7,12 +7,14 @@ import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.UserConvert;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Optional;  
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +24,22 @@ public class UserServiceImpl implements UserService {
     private final UserConvert userConvert;
     private final PasswordEncoder passwordEncoder;
 
-    public List<UserResponse> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(userConvert::UserToUserResponse).collect(Collectors.toList());
+    @Override
+    public Page<UserResponse> getAllUsers(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> usersPage = userRepository.findAll(pageable);
+
+        return usersPage.map(user -> convertToUserResponse(user));
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .status(user.getStatus())
+                .build();
     }
 
     public Optional<UserResponse> getUserById(Long id){

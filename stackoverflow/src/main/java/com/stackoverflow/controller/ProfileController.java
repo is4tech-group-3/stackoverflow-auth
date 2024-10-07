@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.stackoverflow.util.AuditAnnotation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,9 +32,8 @@ public class ProfileController {
 
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping()
-    public ResponseEntity<List<Profile>> getProfiles() {
-        List<Profile> profiles = profileService.getProfiles();
-        return new ResponseEntity<>(profiles, HttpStatus.OK);
+    public Page<Profile> getProfiles(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
+        return profileService.getProfiles(page, size);
     }
 
     @AuditAnnotation(ENTITY_NAME)
