@@ -29,17 +29,7 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(page, size);
         Page<User> usersPage = userRepository.findAll(pageable);
 
-        return usersPage.map(user -> convertToUserResponse(user));
-    }
-
-    private UserResponse convertToUserResponse(User user) {
-        return UserResponse.builder()
-                .name(user.getName())
-                .surname(user.getSurname())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .status(user.getStatus())
-                .build();
+        return usersPage.map(this::convertToUserResponse);
     }
 
     public Optional<UserResponse> getUserById(Long id){
@@ -59,6 +49,17 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userRequestUpdate.getUsername());
 
         return userConvert.UserToUserResponse(userRepository.save(user));
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .status(user.getStatus())
+                .build();
     }
 
     @Override
