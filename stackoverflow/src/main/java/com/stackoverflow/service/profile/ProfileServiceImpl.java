@@ -77,7 +77,8 @@ public class ProfileServiceImpl implements ProfileService {
         ValidationUtil.validateMaxLength(profileRequest.getName(), 20, "Name");
         ValidationUtil.validateMaxLength(profileRequest.getDescription(), 50, "Description");
 
-        if (profileRepository.findByName(profileRequest.getName()).isPresent()) {
+
+        if(!profile.getName().equals(profileRequest.getName()) && profileRepository.findByName(profileRequest.getName()).isPresent()){
             throw new IllegalArgumentException("Profile name already exists");
         }
 

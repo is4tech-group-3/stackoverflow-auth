@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
         ValidationUtil.validateMaxLength(roleRequest.getName(), 20, "Name");
         ValidationUtil.validateMaxLength(roleRequest.getDescription(), 50, "Description");
 
-        if (roleRepository.findByName(roleRequest.getName()).isPresent()) {
+        if(!role.getName().equals(roleRequest.getName()) && roleRepository.findByName(roleRequest.getName()).isPresent()){
             throw new IllegalArgumentException("Role name already exists");
         }
 
