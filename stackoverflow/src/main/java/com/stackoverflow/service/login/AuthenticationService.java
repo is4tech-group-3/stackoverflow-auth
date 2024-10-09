@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,10 +81,15 @@ public class AuthenticationService {
         ValidationUtil.validateNotEmpty(input.getEmail(), "Email");
         ValidationUtil.validateNotEmpty(input.getUsername(), "Username");
 
+        if(userRepository.findByUsername(input.getUsername()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username already exists");
+        }
+
         String password = generatePassword();
         ValidationUtil.validationEmailFormat(input.getEmail());
         ValidationUtil.validateUniqueEmail(userRepository, input.getEmail());
         ValidationUtil.validatePassword(password);
+        ValidationUtil.validateUsername(input.getUsername());
 
         User user = new User();
         user.setName(input.getName());

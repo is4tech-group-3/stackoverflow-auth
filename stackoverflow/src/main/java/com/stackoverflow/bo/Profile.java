@@ -13,6 +13,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,9 +36,15 @@ public class Profile implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProfile;
     
+    @Size(max = 20, message = "The name must not be longer than 20 characters")
+    @NotNull(message = "The name field cannot be null")
+    @NotBlank(message = "Name is required")
     @Column(name = "name")
     private String name;
 
+    @Size(max = 50, message = "The description must not be longer than 50 characters")
+    @NotNull(message = "The description field cannot be null")
+    @NotBlank(message = "Description is required")
     @Column(name = "description")
     private String description;
 

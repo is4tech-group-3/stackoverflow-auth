@@ -5,6 +5,8 @@ import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
 import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.UserConvert;
+import com.stackoverflow.util.ValidationUtil;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -12,8 +14,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;  
 
@@ -46,6 +50,20 @@ public class UserServiceImpl implements UserService {
 
     public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate){
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+
+        ValidationUtil.validateNotEmpty(userRequestUpdate.getName(), "Name");
+        ValidationUtil.validateNotEmpty(userRequestUpdate.getSurname(), "Surname");
+        ValidationUtil.validateNotEmpty(userRequestUpdate.getUsername(), "Username");
+
+        ValidationUtil.validateMaxLength(userRequestUpdate.getName(), 50, "Name");
+        ValidationUtil.validateMaxLength(userRequestUpdate.getSurname(), 50, "Surname");
+        ValidationUtil.validateMaxLength(userRequestUpdate.getUsername(), 50, "Username");
+
+        ValidationUtil.validateUsername(userRequestUpdate.getUsername());
+
+        if(userRepository.findByUsername(userRequestUpdate.getUsername()).isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username already exists");
+        }
 
         user.setName(userRequestUpdate.getName());
         user.setSurname(userRequestUpdate.getSurname());
