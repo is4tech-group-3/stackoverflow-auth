@@ -1,5 +1,7 @@
 package com.stackoverflow.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stackoverflow.bo.Audit;
 import com.stackoverflow.bo.User;
 import com.stackoverflow.repository.UserRepository;
@@ -13,10 +15,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
-
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Component
@@ -58,33 +59,34 @@ public class AuditInterceptor implements HandlerInterceptor {
 
             if (audit != null) {
                 ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
-                String requestBody = getRequestBody(cachingRequest);
-                if (!requestBody.isEmpty() && request.getContentLength() > 0) {
-                    audit.setRequest(requestBody);
-                } else {
-                    audit.setRequest("NO REQUEST BODY");
-                }
+                Object requestBody = getRequestBody(cachingRequest);
+                audit.setRequest(Objects.requireNonNullElse(requestBody, "NO REQUEST BODY"));
                 audit.setStatusCode(response.getStatus());
                 audit.setStatusDescription(HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
-
                 Object responseBody = request.getAttribute("responseBody");
-                if (responseBody != null) {
-                    audit.setResponse(responseBody);
-                } else {
-                    audit.setResponse("NO RESPONSE BODY");
-                }
+                audit.setResponse(Objects.requireNonNullElse(responseBody, "NO RESPONSE BODY"));
 
                 auditRequest.auditPost(audit);
             }
         }
     }
 
-    private String getRequestBody(ContentCachingRequestWrapper request) {
-        byte[] content = request.getContentAsByteArray();
+    private Object getRequestBody(ContentCachingRequestWrapper cachingRequest) {
+        byte[] content = cachingRequest.getContentAsByteArray();
+
+        if (content.length == 0) {
+            return null;
+        }
+
         try {
-            return new String(content, request.getCharacterEncoding());
-        } catch (UnsupportedEncodingException e) {
-            throw new UnsupportedOperationException("Encoding not supported request body");
+            String body = new String(content, cachingRequest.getCharacterEncoding());
+            try {
+                return new ObjectMapper().readValue(body, Object.class);
+            } catch (JsonProcessingException e) {
+                return body;
+            }
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("Encoding not supported for request body", e);
         }
     }
 
