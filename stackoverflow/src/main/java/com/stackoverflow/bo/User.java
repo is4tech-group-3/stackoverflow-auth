@@ -3,6 +3,8 @@ package com.stackoverflow.bo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,23 +28,31 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
+    @Size(max = 50, message = "The name must not be longer than 50 characters")
+    @NotNull(message = "The name field cannot be null")
     @NotBlank(message = "Name is required")
     @Column(nullable = false)
     private String name;
 
+    @Size(max = 50, message = "The surname must not be longer than 50 characters")
+    @NotNull(message = "The surname field cannot be null")
     @NotBlank(message = "Surname is required")
     @Column(nullable = false)
     private String surname;
 
+    @NotNull(message = "The email field cannot be null")
     @NotBlank(message =  "Email is required")
     @Email(message = "Email should be valid")
-    @Column(unique = true, length = 100, nullable = false)
+    @Column(unique = true, length = 50, nullable = false)
     private String email;
 
+    @Size(max = 50, message = "The username must not be longer than 50 characters")
+    @NotNull(message = "The username field cannot be null")
     @NotBlank(message =  "Username is required")
     @Column(nullable = false)
     private String username;
 
+    @NotNull(message = "The password field cannot be null")
     @NotBlank(message =  "Password is required")
     @Column(nullable = false)
     private String password;

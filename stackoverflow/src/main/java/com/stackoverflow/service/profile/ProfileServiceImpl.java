@@ -33,7 +33,14 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile createProfile(ProfileRequest profileRequest) {
         ValidationUtil.validateNotEmpty(profileRequest.getName(), "Name");
         ValidationUtil.validateNotEmpty(profileRequest.getDescription(), "Description");
-        
+
+        if (profileRepository.findByName(profileRequest.getName()).isPresent()) {
+            throw new IllegalArgumentException("Profile name already exists");
+        }
+
+        ValidationUtil.validateMaxLength(profileRequest.getName(), 20, "Name");
+        ValidationUtil.validateMaxLength(profileRequest.getDescription(), 50, "Description");
+
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         Profile profile = Profile.builder()
                 .name(profileRequest.getName())
@@ -46,8 +53,9 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Page<Profile> getProfiles(int page, int size, String sortBy, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
         Pageable pageable = PageRequest.of(page, size, sort);
         return profileRepository.findAll(pageable);
     }
@@ -66,6 +74,13 @@ public class ProfileServiceImpl implements ProfileService {
         ValidationUtil.validateNotEmpty(profileRequest.getName(), "Name");
         ValidationUtil.validateNotEmpty(profileRequest.getDescription(), "Description");
 
+        ValidationUtil.validateMaxLength(profileRequest.getName(), 20, "Name");
+        ValidationUtil.validateMaxLength(profileRequest.getDescription(), 50, "Description");
+
+        if (profileRepository.findByName(profileRequest.getName()).isPresent()) {
+            throw new IllegalArgumentException("Profile name already exists");
+        }
+
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         profile.setName(profileRequest.getName());
         profile.setDescription(profileRequest.getDescription());
@@ -77,7 +92,6 @@ public class ProfileServiceImpl implements ProfileService {
     public void deleteProfile(Long idProfile) {
         profileRepository.deleteById(idProfile);
     }
-
 
     @Override
     public Profile changeStatusProfile(Long id) {
