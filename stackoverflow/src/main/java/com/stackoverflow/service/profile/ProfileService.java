@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 public interface ProfileService {
     Profile createProfile(ProfileRequest profileRequest);
 
-    Page<Profile> getProfiles(int page, int size);
+    Page<Profile> getProfiles(int page, int size, String sortBy, String sortDirection);
 
     Profile findProfileById(Long idProfile);
 
