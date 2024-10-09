@@ -34,9 +34,12 @@ public class UserController {
 
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping
-    public Page<UserResponse> getAllUsers(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
-        return userService.getAllUsers(page, size);
+    public Page<UserResponse> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "desc") String sortDirection) {
+        return userService.getAllUsers(page, size, sortBy, sortDirection);
     }
 
     @AuditAnnotation(ENTITY_NAME)
