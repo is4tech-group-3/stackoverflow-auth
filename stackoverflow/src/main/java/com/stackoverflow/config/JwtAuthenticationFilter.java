@@ -63,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 //Extraer roles desde el jwt
                 List<String> roles = (List<String>) jwtService.extractClaim(jwt, claims -> claims.get("roles"));
+                Long userId = jwtService.extractUserId(jwt);
 
                 //Convertir roles a GrantedAuthority
                 Collection<? extends GrantedAuthority> authorities = roles.stream()

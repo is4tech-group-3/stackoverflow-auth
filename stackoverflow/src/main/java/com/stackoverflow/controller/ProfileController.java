@@ -67,4 +67,6 @@ public class ProfileController {
         Profile profile = profileService.changeStatusProfile(idProfile);
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
+
+
 }

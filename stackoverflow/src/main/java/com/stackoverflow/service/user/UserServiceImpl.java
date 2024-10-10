@@ -1,8 +1,10 @@
 package com.stackoverflow.service.user;
 
+import com.stackoverflow.bo.Profile;
 import com.stackoverflow.bo.User;
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
+import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.UserConvert;
 import com.stackoverflow.util.ValidationUtil;
@@ -19,7 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;  
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +30,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserConvert userConvert;
     private final PasswordEncoder passwordEncoder;
+    private final ProfileRepository profileRepository;
 
     @Override
     public Page<UserResponse> getAllUsers(int page, int size, String sortBy, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> usersPage = userRepository.findAll(pageable);
@@ -39,17 +43,18 @@ public class UserServiceImpl implements UserService {
         return usersPage.map(this::convertToUserResponse);
     }
 
-    public Optional<UserResponse> getUserById(Long id){
+    public Optional<UserResponse> getUserById(Long id) {
         Optional<User> userFound = userRepository.findById(id);
         return userFound.map(userConvert::UserToUserResponse);
     }
 
-    public void deleteUser(Long id){
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
-    public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate){
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+    public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
 
         ValidationUtil.validateNotEmpty(userRequestUpdate.getName(), "Name");
         ValidationUtil.validateNotEmpty(userRequestUpdate.getSurname(), "Surname");
@@ -61,13 +66,15 @@ public class UserServiceImpl implements UserService {
 
         ValidationUtil.validateUsername(userRequestUpdate.getUsername());
 
-        if(userRepository.findByUsername(userRequestUpdate.getUsername()).isPresent()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username already exists");
+        if (!user.getUsername().equals(userRequestUpdate.getUsername())) {
+            if (userRepository.findByUsername(userRequestUpdate.getUsername()).isPresent()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username already exists");
+            }
+            user.setUsername(userRequestUpdate.getUsername());
         }
 
         user.setName(userRequestUpdate.getName());
         user.setSurname(userRequestUpdate.getSurname());
-        user.setUsername(userRequestUpdate.getUsername());
 
         return userConvert.UserToUserResponse(userRepository.save(user));
     }
@@ -88,11 +95,36 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        if(!passwordEncoder.matches(oldPassword, user.getPassword())){
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new RuntimeException("Old password is incorrect");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserResponse> getUserByUsername(String username) {
+        Optional<User> userFound = userRepository.findByUsername(username);
+        return userFound.map(userConvert::UserToUserResponse);
+    }
+
+    @Override
+    public Optional<UserResponse> getUserByEmail(String email) {
+        Optional<User> userFound = userRepository.findByEmail(email);
+        return userFound.map(userConvert::UserToUserResponse);
+    }
+
+    @Override
+    public UserResponse updateProfileUser(Long userId, Long profileId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + profileId));
+
+        user.setProfileId(profileId); 
+
+        return userConvert.UserToUserResponse(userRepository.save(user));
     }
 }

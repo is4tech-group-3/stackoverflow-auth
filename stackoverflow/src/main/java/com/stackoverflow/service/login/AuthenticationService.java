@@ -81,6 +81,11 @@ public class AuthenticationService {
         ValidationUtil.validateNotEmpty(input.getEmail(), "Email");
         ValidationUtil.validateNotEmpty(input.getUsername(), "Username");
 
+        ValidationUtil.validateMaxLength(input.getName(), 50, "Name");
+        ValidationUtil.validateMaxLength(input.getSurname(), 50, "Surname");
+        ValidationUtil.validateMaxLength(input.getEmail(), 50, "Email");
+        ValidationUtil.validateMaxLength(input.getUsername(), 50, "Username");
+
         if(userRepository.findByUsername(input.getUsername()).isPresent()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username already exists");
         }
