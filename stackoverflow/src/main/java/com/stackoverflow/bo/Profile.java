@@ -45,10 +45,8 @@ public class Profile implements Serializable{
     @Size(max = 50, message = "The description must not be longer than 50 characters")
     @NotNull(message = "The description field cannot be null")
     @NotBlank(message = "Description is required")
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "status")
     private Boolean status;
 
     @ManyToMany(fetch = FetchType.EAGER)

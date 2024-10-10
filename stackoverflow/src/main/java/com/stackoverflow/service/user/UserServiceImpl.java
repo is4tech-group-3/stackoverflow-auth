@@ -7,21 +7,23 @@ import com.stackoverflow.dto.user.UserResponse;
 import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.UserConvert;
-import com.stackoverflow.util.ValidationUtil;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserConvert userConvert;
     private final PasswordEncoder passwordEncoder;
+    private final Validator validator;
     private final ProfileRepository profileRepository;
 
     @Override
@@ -53,29 +56,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
-
-        ValidationUtil.validateNotEmpty(userRequestUpdate.getName(), "Name");
-        ValidationUtil.validateNotEmpty(userRequestUpdate.getSurname(), "Surname");
-        ValidationUtil.validateNotEmpty(userRequestUpdate.getUsername(), "Username");
-
-        ValidationUtil.validateMaxLength(userRequestUpdate.getName(), 50, "Name");
-        ValidationUtil.validateMaxLength(userRequestUpdate.getSurname(), 50, "Surname");
-        ValidationUtil.validateMaxLength(userRequestUpdate.getUsername(), 50, "Username");
-
-        ValidationUtil.validateUsername(userRequestUpdate.getUsername());
-
-        if (!user.getUsername().equals(userRequestUpdate.getUsername())) {
-            if (userRepository.findByUsername(userRequestUpdate.getUsername()).isPresent()) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The username already exists");
-            }
-            user.setUsername(userRequestUpdate.getUsername());
-        }
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+        Optional<User> username = userRepository.findByUsername(userRequestUpdate.getUsername());
+        if (username.isPresent() && !username.get().getId().equals(id))
+            throw new DataIntegrityViolationException("Username already exists");
 
         user.setName(userRequestUpdate.getName());
         user.setSurname(userRequestUpdate.getSurname());
-
+        user.setUsername(userRequestUpdate.getUsername());
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+      
         return userConvert.UserToUserResponse(userRepository.save(user));
     }
 
@@ -95,9 +86,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword()))
             throw new RuntimeException("Old password is incorrect");
-        }
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
