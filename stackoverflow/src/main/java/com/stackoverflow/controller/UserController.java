@@ -4,6 +4,7 @@ import com.stackoverflow.dto.codeverification.EmailDto;
 import com.stackoverflow.dto.codeverification.PasswordResetDto;
 import com.stackoverflow.dto.codeverification.PasswordResponse;
 import com.stackoverflow.dto.user.PasswordUpdate;
+import com.stackoverflow.dto.user.UserProfileUpdateRequest;
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
 import com.stackoverflow.service.login.AuthenticationService;
@@ -53,6 +54,30 @@ public class UserController {
     }
 
     @AuditAnnotation(ENTITY_NAME)
+    @GetMapping("/findByUsername/{username}")
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
+        Optional<UserResponse> user = userService.getUserByUsername(username);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @AuditAnnotation(ENTITY_NAME)
+    @GetMapping("/findByEmail/{email}")
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
+        Optional<UserResponse> user = userService.getUserByUsername(email);
+
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @AuditAnnotation(ENTITY_NAME)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
@@ -87,4 +112,12 @@ public class UserController {
         PasswordResponse response = new PasswordResponse("Password has been updated correctly");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PatchMapping("/updateProfile/{id}")
+    public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) {
+        UserResponse updatedUser = userService.updateProfileUser(id, userProfileUpdateRequest.getProfileId());
+        return ResponseEntity.ok(updatedUser);
+    }
+
 }
+

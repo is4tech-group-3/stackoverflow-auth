@@ -1,8 +1,10 @@
 package com.stackoverflow.service.user;
 
+import com.stackoverflow.bo.Profile;
 import com.stackoverflow.bo.User;
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
+import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
 import com.stackoverflow.util.UserConvert;
 
@@ -34,7 +36,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponse> getAllUsers(int page, int size, String sortBy, String sortDirection) {
-        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> usersPage = userRepository.findAll(pageable);
@@ -62,7 +65,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userRequestUpdate.getUsername());
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
-
+      
         return userConvert.UserToUserResponse(userRepository.save(user));
     }
 
@@ -85,8 +88,32 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(oldPassword, user.getPassword()))
             throw new RuntimeException("Old password is incorrect");
 
-
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserResponse> getUserByUsername(String username) {
+        Optional<User> userFound = userRepository.findByUsername(username);
+        return userFound.map(userConvert::UserToUserResponse);
+    }
+
+    @Override
+    public Optional<UserResponse> getUserByEmail(String email) {
+        Optional<User> userFound = userRepository.findByEmail(email);
+        return userFound.map(userConvert::UserToUserResponse);
+    }
+
+    @Override
+    public UserResponse updateProfileUser(Long userId, Long profileId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + profileId));
+
+        user.setProfileId(profileId); 
+
+        return userConvert.UserToUserResponse(userRepository.save(user));
     }
 }

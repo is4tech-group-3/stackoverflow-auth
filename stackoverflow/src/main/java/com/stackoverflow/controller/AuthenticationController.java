@@ -37,20 +37,24 @@ public class AuthenticationController {
 
         List<String> roles = authenticationService.getUserRoles(authenticatedUser);
 
+        Long userId = authenticatedUser.getId();
+
         String jwtToken = jwtService.generateToken(
                 new org.springframework.security.core.userdetails.User(
                         authenticatedUser.getEmail(),
                         authenticatedUser.getPassword(),
-                        Collections.emptyList()
-                ),
-                roles
+                        Collections.emptyList()),
+                roles,
+                userId 
         );
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
         loginResponse.setRoles(roles);
+        loginResponse.setUserId(userId); 
 
         return ResponseEntity.ok(loginResponse);
     }
+
 }

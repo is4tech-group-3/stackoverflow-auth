@@ -75,12 +75,8 @@ public class AuthenticationService {
     public User signup(RegisterUserDto input) {
         if (userRepository.findByUsername(input.getUsername()).isPresent())
             throw new DataIntegrityViolationException("Username already exists");
-
-
         if (userRepository.findByEmail(input.getEmail()).isPresent())
             throw new DataIntegrityViolationException("Email already exists");
-
-
         String password = generatePassword();
         User user = new User();
         user.setName(input.getName());
@@ -89,7 +85,6 @@ public class AuthenticationService {
         user.setUsername(input.getUsername());
         user.setPassword(passwordEncoder.encode(password));
         user.setStatus(true);
-
 
         Profile defaultProfile = profileRepository.findByName("USER")
                 .orElseThrow(() -> new EntityNotFoundException("Default profile 'USER' not found."));
@@ -100,7 +95,6 @@ public class AuthenticationService {
         String nameUser = input.getName();
 
         mailService.sendEmailWelcome(to, password, nameUser);
-
         LoggerUtil.loggerInfo(request, HttpStatus.CREATED, "Registered user");
 
         return userRepository.save(user);
