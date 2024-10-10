@@ -1,10 +1,7 @@
 package com.stackoverflow.bo;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,15 +28,18 @@ public class User implements UserDetails {
     @Size(max = 50, message = "The name must not be longer than 50 characters")
     @NotNull(message = "The name field cannot be null")
     @NotBlank(message = "Name is required")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "The name must contain only letters and no spaces")
     @Column(nullable = false)
     private String name;
 
     @Size(max = 50, message = "The surname must not be longer than 50 characters")
     @NotNull(message = "The surname field cannot be null")
     @NotBlank(message = "Surname is required")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "The name must contain only letters and no spaces")
     @Column(nullable = false)
     private String surname;
 
+    @Size(max = 50, message = "The email must not be longer than 50 characters")
     @NotNull(message = "The email field cannot be null")
     @NotBlank(message =  "Email is required")
     @Email(message = "Email should be valid")
@@ -49,6 +49,7 @@ public class User implements UserDetails {
     @Size(max = 50, message = "The username must not be longer than 50 characters")
     @NotNull(message = "The username field cannot be null")
     @NotBlank(message =  "Username is required")
+    @Pattern(regexp = "^(?!-)[a-zA-Z0-9]+([-][a-zA-Z0-9]+)*$", message = "The name must be alphanumeric, may contain hyphens (not at the start), and no spaces")
     @Column(nullable = false)
     private String username;
 

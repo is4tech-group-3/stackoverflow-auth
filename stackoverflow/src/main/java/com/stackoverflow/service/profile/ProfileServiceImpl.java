@@ -3,23 +3,24 @@ package com.stackoverflow.service.profile;
 import com.stackoverflow.bo.Role;
 import com.stackoverflow.dto.profile.ProfileRequest;
 import com.stackoverflow.repository.RoleRepository;
-import com.stackoverflow.util.ValidationUtil;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.AllArgsConstructor;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.repository.ProfileRepository;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -27,19 +28,13 @@ import java.util.Set;
 public class ProfileServiceImpl implements ProfileService {
 
     private final RoleRepository roleRepository;
-    private ProfileRepository profileRepository;
+    private final ProfileRepository profileRepository;
+    private final Validator validator;
 
     @Override
     public Profile createProfile(ProfileRequest profileRequest) {
-        ValidationUtil.validateNotEmpty(profileRequest.getName(), "Name");
-        ValidationUtil.validateNotEmpty(profileRequest.getDescription(), "Description");
-
-        if (profileRepository.findByName(profileRequest.getName()).isPresent()) {
-            throw new IllegalArgumentException("Profile name already exists");
-        }
-
-        ValidationUtil.validateMaxLength(profileRequest.getName(), 20, "Name");
-        ValidationUtil.validateMaxLength(profileRequest.getDescription(), 50, "Description");
+        if (profileRepository.findByName(profileRequest.getName()).isPresent())
+            throw new DataIntegrityViolationException("Profile already exists");
 
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         Profile profile = Profile.builder()
@@ -71,21 +66,19 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = profileRepository.findById(idProfile)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + idProfile));
 
-        ValidationUtil.validateNotEmpty(profileRequest.getName(), "Name");
-        ValidationUtil.validateNotEmpty(profileRequest.getDescription(), "Description");
-
-        ValidationUtil.validateMaxLength(profileRequest.getName(), 20, "Name");
-        ValidationUtil.validateMaxLength(profileRequest.getDescription(), 50, "Description");
-
-
-        if(!profile.getName().equals(profileRequest.getName()) && profileRepository.findByName(profileRequest.getName()).isPresent()){
-            throw new IllegalArgumentException("Profile name already exists");
+        if (!profile.getName().equals(profileRequest.getName()) && profileRepository.findByName(profileRequest.getName()).isPresent()) {
+            throw new DataIntegrityViolationException("Profile name already exists");
         }
 
         Set<Role> roles = new HashSet<>(roleRepository.findAllById(profileRequest.getIdRoles()));
         profile.setName(profileRequest.getName());
         profile.setDescription(profileRequest.getDescription());
         profile.setRoles(roles);
+
+        Set<ConstraintViolation<Profile>> violations = validator.validate(profile);
+        if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+
+
         return profileRepository.save(profile);
     }
 
