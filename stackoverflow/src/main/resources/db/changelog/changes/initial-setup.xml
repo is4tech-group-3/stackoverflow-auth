@@ -111,8 +111,6 @@
             <column name="description" type="VARCHAR(255)"/>
             <column name="date_creation" type="TIMESTAMP"/>
             <column name="date_update" type="TIMESTAMP"/>
-            <column name="likes" type="INTEGER"/>
-            <column name="liked" type="BOOLEAN"/>
             <column name="verified" type="BOOLEAN"/>
             <column name="question_id" type="BIGINT"/>
             <column name="user_id" type="BIGINT"/>
@@ -139,6 +137,18 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="table_answer_user (like)" author="weslly">
+        <createTable tableName="answer_likes">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="answer_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="answer_likes" columnNames="user_id, answer_id" constraintName="pk_answer_likes"/>
     </changeSet>
 
     <changeSet id="table_code_verification" author="lester">
@@ -236,6 +246,18 @@
                                  constraintName="fk_question_tag_tag"
                                  referencedTableName="tags"
                                  referencedColumnNames="tag_id"/>
+
+        <addForeignKeyConstraint baseTableName="answer_likes"
+                                 baseColumnNames="answer_id"
+                                 constraintName="fk_answer_likes_answer"
+                                 referencedTableName="answers"
+                                 referencedColumnNames="answer_id"/>
+
+        <addForeignKeyConstraint baseTableName="answer_likes"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_answer_likes_user"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"/>
     </changeSet>
 
     <changeSet id="insert_profiles" author="lester">
@@ -281,47 +303,47 @@
 
     <changeSet id="insert_roles" author="weslly">
         <insert tableName="roles">
-            <column name="name" value="USER"/>
+            <column name="name" value="ROLE_USER"/>
             <column name="description" value="role to access USER services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="PROFILE"/>
+            <column name="name" value="ROLE_PROFILE"/>
             <column name="description" value="role to access PROFILE services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="ROLE"/>
+            <column name="name" value="ROLE_ROLE"/>
             <column name="description" value="role to access ROLE services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="QUESTION"/>
+            <column name="name" value="ROLE_QUESTION"/>
             <column name="description" value="role to access QUESTION services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="RESPONSE"/>
+            <column name="name" value="ROLE_RESPONSE"/>
             <column name="description" value="role to access RESPONSE services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="PUBLICATION"/>
+            <column name="name" value="ROLE_PUBLICATION"/>
             <column name="description" value="role to access PUBLICATION services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="COMMENT"/>
+            <column name="name" value="ROLE_COMMENT"/>
             <column name="description" value="role to access COMMENT services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="TAG"/>
+            <column name="name" value="ROLE_TAG"/>
             <column name="description" value="role to access TAG services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="AUDIT"/>
+            <column name="name" value="ROLE_AUDIT"/>
             <column name="description" value="role to access AUDIT services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
