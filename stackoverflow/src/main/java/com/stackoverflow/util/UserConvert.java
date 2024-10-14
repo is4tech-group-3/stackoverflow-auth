@@ -13,6 +13,7 @@ public class UserConvert {
                 .surname(user.getSurname())
                 .email(user.getEmail())
                 .username(user.getUsername())
+                .idProfile(user.getProfileId())
                 .status(user.getStatus())
                 .build();
     }
