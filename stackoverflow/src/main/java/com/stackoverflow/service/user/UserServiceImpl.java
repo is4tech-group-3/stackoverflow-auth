@@ -56,7 +56,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
         Optional<User> username = userRepository.findByUsername(userRequestUpdate.getUsername());
         if (username.isPresent() && !username.get().getId().equals(id))
             throw new DataIntegrityViolationException("Username already exists");
@@ -65,8 +66,9 @@ public class UserServiceImpl implements UserService {
         user.setSurname(userRequestUpdate.getSurname());
         user.setUsername(userRequestUpdate.getUsername());
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
-      
+        if (!violations.isEmpty())
+            throw new ConstraintViolationException(violations);
+
         return userConvert.UserToUserResponse(userRepository.save(user));
     }
 
@@ -113,8 +115,20 @@ public class UserServiceImpl implements UserService {
         Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + profileId));
 
-        user.setProfileId(profileId); 
+        user.setProfileId(profileId);
 
         return userConvert.UserToUserResponse(userRepository.save(user));
     }
+
+    @Override
+    public UserResponse changeStatusUser(Long idUser) {
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + idUser));
+
+        user.setStatus(!user.getStatus());
+        
+        User updatedUser = userRepository.save(user);
+        return userConvert.UserToUserResponse(updatedUser);
+    }
+
 }

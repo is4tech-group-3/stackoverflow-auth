@@ -16,4 +16,5 @@ public interface UserService {
     void updatePassword(Long id, String oldPassword, String newPassword);
     Optional<UserResponse> getUserByUsername(String username);
     Optional<UserResponse> getUserByEmail(String email);
+    UserResponse changeStatusUser(Long idUser);
 }
