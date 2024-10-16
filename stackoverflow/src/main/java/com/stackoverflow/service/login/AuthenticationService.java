@@ -2,6 +2,7 @@ package com.stackoverflow.service.login;
 
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.service.MailService;
+import com.stackoverflow.service.s3.S3Service;
 import com.stackoverflow.util.LoggerUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,14 +42,17 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final S3Service s3Service;
 
     public AuthenticationService(
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            S3Service s3Service) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.s3Service = s3Service;
     }
 
     public String generatePassword() {
@@ -78,6 +82,13 @@ public class AuthenticationService {
         if (userRepository.findByEmail(input.getEmail()).isPresent())
             throw new DataIntegrityViolationException("Email already exists");
         String password = generatePassword();
+
+        String imageUrl = null;
+        if (input.getImage() != null && !input.getImage().isEmpty()) {
+                String key = s3Service.putObject(input.getImage());
+                imageUrl = s3Service.getObjectUrl(key);
+        }
+
         User user = new User();
         user.setName(input.getName());
         user.setSurname(input.getSurname());
@@ -85,6 +96,7 @@ public class AuthenticationService {
         user.setUsername(input.getUsername());
         user.setPassword(passwordEncoder.encode(password));
         user.setStatus(true);
+        user.setProfilePhoto(imageUrl);
 
         Profile defaultProfile = profileRepository.findByName("USER")
                 .orElseThrow(() -> new EntityNotFoundException("Default profile 'USER' not found."));

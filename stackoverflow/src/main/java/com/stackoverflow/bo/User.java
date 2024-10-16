@@ -68,6 +68,9 @@ public class User implements UserDetails {
     @Column(name = "profile_id")
     private Long profileId;
 
+    @Column(name = "url_image")
+    private String profilePhoto;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
