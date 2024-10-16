@@ -20,6 +20,7 @@
             <column name="password" type="VARCHAR(512)"/>
             <column name="status" type="BOOLEAN" defaultValueBoolean="true"/>
             <column name="created" type="TIMESTAMP"/>
+            <column name="url_image" type="VARCHAR(256)"/>
             <column name="profile_id" type="BIGINT"/>
         </createTable>
     </changeSet>
@@ -60,6 +61,7 @@
             </column>
             <column name="title" type="VARCHAR(50)"/>
             <column name="description" type="VARCHAR(256)"/>
+            <column name="url_image" type="VARCHAR(256)"/>
             <column name="date_creation" type="TIMESTAMP"/>
             <column name="date_update" type="TIMESTAMP"/>
             <column name="user_id" type="BIGINT"/>
