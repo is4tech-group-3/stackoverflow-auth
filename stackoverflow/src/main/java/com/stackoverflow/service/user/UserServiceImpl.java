@@ -2,10 +2,12 @@ package com.stackoverflow.service.user;
 
 import com.stackoverflow.bo.Profile;
 import com.stackoverflow.bo.User;
+import com.stackoverflow.dto.user.UserPhotoRequest;
 import com.stackoverflow.dto.user.UserRequestUpdate;
 import com.stackoverflow.dto.user.UserResponse;
 import com.stackoverflow.repository.ProfileRepository;
 import com.stackoverflow.repository.UserRepository;
+import com.stackoverflow.service.s3.S3Service;
 import com.stackoverflow.util.UserConvert;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.Set;
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
     private final ProfileRepository profileRepository;
+    private final S3Service s3Service;
 
     @Override
     public Page<UserResponse> getAllUsers(int page, int size, String sortBy, String sortDirection) {
@@ -145,6 +149,35 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(user);
         return userConvert.UserToUserResponse(updatedUser);
+    }
+
+    @Override
+    public UserResponse changePhotoProfile(UserPhotoRequest userPhotoRequest) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = ((User) userDetails).getId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if (user.getProfilePhoto() != null && !user.getProfilePhoto().isEmpty()) {
+            String oldKey = user.getProfilePhoto().substring(user.getProfilePhoto().lastIndexOf("/") + 1);
+            try {
+                s3Service.deleteObject(oldKey);
+            } catch (Exception e) {
+                throw new RuntimeException("Error deleting the old image: " + e.getMessage(), e);
+            }
+        }
+
+        String imageUrl = null;
+        if (userPhotoRequest.getImage() != null || !userPhotoRequest.getImage().isEmpty()) {
+            String key = s3Service.putObject(userPhotoRequest.getImage());
+            imageUrl = s3Service.getObjectUrl(key);
+        }
+
+        user.setProfilePhoto(imageUrl);
+        User updateUser = userRepository.save(user);
+
+        return userConvert.UserToUserResponse(updateUser);
     }
 
 }
