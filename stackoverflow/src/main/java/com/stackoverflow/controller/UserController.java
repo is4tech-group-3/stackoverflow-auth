@@ -4,10 +4,7 @@ import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.codeverification.EmailDto;
 import com.stackoverflow.dto.codeverification.PasswordResetDto;
 import com.stackoverflow.dto.codeverification.PasswordResponse;
-import com.stackoverflow.dto.user.PasswordUpdate;
-import com.stackoverflow.dto.user.UserProfileUpdateRequest;
-import com.stackoverflow.dto.user.UserRequestUpdate;
-import com.stackoverflow.dto.user.UserResponse;
+import com.stackoverflow.dto.user.*;
 import com.stackoverflow.service.login.AuthenticationService;
 import com.stackoverflow.service.recoverypassword.CodeVerificationService;
 import com.stackoverflow.service.user.UserService;
@@ -93,11 +90,10 @@ public class UserController {
         return ResponseEntity.ok(updateUser);
     }
 
-    @PatchMapping("/passwordChange/{id}")
-    public ResponseEntity<Void> changePassword(@PathVariable(name = "id") Long id,
-            @RequestBody PasswordUpdate passwordUpdate) {
-        userService.updatePassword(id, passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword());
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/passwordChange")
+    public ResponseEntity<Void> changePassword(@RequestBody PasswordUpdate passwordUpdate) {
+        userService.updatePassword(passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/password-recovery")
@@ -123,6 +119,12 @@ public class UserController {
     @PatchMapping("/changeStatus/{id}")
     public ResponseEntity<UserResponse> changeStatusUser(@PathVariable("id") Long idUser) {
         UserResponse user = userService.changeStatusUser(idUser);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PatchMapping("/changePhotoProfile")
+    public ResponseEntity<UserResponse> changePhotoProfile(@ModelAttribute UserPhotoRequest userPhotoRequest){
+        UserResponse user = userService.changePhotoProfile(userPhotoRequest);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
