@@ -78,7 +78,6 @@ public class ProfileServiceImpl implements ProfileService {
         Set<ConstraintViolation<Profile>> violations = validator.validate(profile);
         if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
 
-
         return profileRepository.save(profile);
     }
 

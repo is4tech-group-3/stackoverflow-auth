@@ -15,6 +15,7 @@ public class UserConvert {
                 .username(user.getUsername())
                 .idProfile(user.getProfileId())
                 .status(user.getStatus())
+                .image(user.getProfilePhoto())
                 .build();
     }
 }

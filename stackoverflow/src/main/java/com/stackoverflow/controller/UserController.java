@@ -93,11 +93,10 @@ public class UserController {
         return ResponseEntity.ok(updateUser);
     }
 
-    @PatchMapping("/passwordChange/{id}")
-    public ResponseEntity<Void> changePassword(@PathVariable(name = "id") Long id,
-            @RequestBody PasswordUpdate passwordUpdate) {
-        userService.updatePassword(id, passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword());
-        return ResponseEntity.noContent().build();
+    @PatchMapping("/passwordChange")
+    public ResponseEntity<Void> changePassword(@RequestBody PasswordUpdate passwordUpdate) {
+        userService.updatePassword(passwordUpdate.getOldPassword(), passwordUpdate.getNewPassword());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/password-recovery")

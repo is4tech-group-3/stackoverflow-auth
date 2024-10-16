@@ -13,4 +13,5 @@ public class UserResponse {
     private String username;
     private Long idProfile;
     private Boolean status;
+    private String image;
 }

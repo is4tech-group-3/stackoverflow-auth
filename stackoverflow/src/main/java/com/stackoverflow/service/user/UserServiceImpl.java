@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -81,16 +83,29 @@ public class UserServiceImpl implements UserService {
                 .username(user.getUsername())
                 .idProfile(user.getProfileId())
                 .status(user.getStatus())
+                .image(user.getProfilePhoto())
                 .build();
     }
 
     @Override
-    public void updatePassword(Long id, String oldPassword, String newPassword) {
-        User user = userRepository.findById(id)
+    public void updatePassword(String oldPassword, String newPassword) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = ((User) userDetails).getId();
+
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        if (!violations.isEmpty())
+            throw new ConstraintViolationException(violations);
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword()))
             throw new RuntimeException("Old password is incorrect");
+
+        String regex = "^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,16}$";
+        if (!newPassword.matches(regex)) {
+            throw new IllegalArgumentException("New password does not meet security requirements");
+        }
 
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
@@ -127,7 +142,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + idUser));
 
         user.setStatus(!user.getStatus());
-        
+
         User updatedUser = userRepository.save(user);
         return userConvert.UserToUserResponse(updatedUser);
     }

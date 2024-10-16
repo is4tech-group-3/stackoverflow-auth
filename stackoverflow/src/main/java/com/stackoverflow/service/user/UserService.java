@@ -13,7 +13,7 @@ public interface UserService {
     void deleteUser(Long id);
     UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate);
     UserResponse updateProfileUser(Long userId, Long profileId);
-    void updatePassword(Long id, String oldPassword, String newPassword);
+    void updatePassword(String oldPassword, String newPassword);
     Optional<UserResponse> getUserByUsername(String username);
     Optional<UserResponse> getUserByEmail(String email);
     UserResponse changeStatusUser(Long idUser);
