@@ -16,7 +16,6 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +24,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.Set;
@@ -64,13 +62,9 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
-        Optional<User> username = userRepository.findByUsername(userRequestUpdate.getUsername());
-        if (username.isPresent() && !username.get().getId().equals(id))
-            throw new DataIntegrityViolationException("Username already exists");
 
         user.setName(userRequestUpdate.getName());
         user.setSurname(userRequestUpdate.getSurname());
-        user.setUsername(userRequestUpdate.getUsername());
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (!violations.isEmpty())
             throw new ConstraintViolationException(violations);
