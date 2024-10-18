@@ -1,9 +1,11 @@
 package com.stackoverflow.config;
 
+import com.stackoverflow.bo.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,21 +25,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+@AllArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
+    private final HandlerExceptionResolver handlerExceptionResolver;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-
-    public JwtAuthenticationFilter(
-            JwtService jwtService,
-            UserDetailsService userDetailsService,
-            HandlerExceptionResolver handlerExceptionResolver) {
-        this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
-        this.handlerExceptionResolver = handlerExceptionResolver;
-    }
 
     @Override
     protected void doFilterInternal(
@@ -53,13 +47,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String userEmail = jwtService.extractUsername(jwt);
+            final String userEmail = jwtService.extractEmail(jwt);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-
+                User user = (User) userDetails;
                 //Extraer roles desde el jwt
                 List<String> roles = (List<String>) jwtService.extractClaim(jwt, claims -> claims.get("roles"));
 
@@ -67,8 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Collection<? extends GrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
                         .toList();
-
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtService.isTokenValid(jwt, user.getEmail())) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,

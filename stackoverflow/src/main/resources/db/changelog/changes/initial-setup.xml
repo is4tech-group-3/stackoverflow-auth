@@ -60,7 +60,7 @@
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="title" type="VARCHAR(50)"/>
-            <column name="description" type="VARCHAR(256)"/>
+            <column name="description" type="VARCHAR(1024)"/>
             <column name="url_image" type="VARCHAR(256)"/>
             <column name="date_creation" type="TIMESTAMP"/>
             <column name="date_update" type="TIMESTAMP"/>
@@ -84,7 +84,7 @@
             <column name="comment_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(1024)"/>
             <column name="date_creation" type="TIMESTAMP"/>
             <column name="date_update" type="TIMESTAMP"/>
             <column name="publication_id" type="BIGINT"/>
@@ -98,7 +98,7 @@
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="title" type="VARCHAR(50)"/>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(1024)"/>
             <column name="date_creation" type="TIMESTAMP"/>
             <column name="date_update" type="TIMESTAMP"/>
             <column name="user_id" type="BIGINT"/>
@@ -110,7 +110,7 @@
             <column name="answer_id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
-            <column name="description" type="VARCHAR(255)"/>
+            <column name="description" type="VARCHAR(1024)"/>
             <column name="date_creation" type="TIMESTAMP"/>
             <column name="date_update" type="TIMESTAMP"/>
             <column name="verified" type="BOOLEAN"/>
@@ -325,8 +325,8 @@
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
-            <column name="name" value="ROLE_RESPONSE"/>
-            <column name="description" value="role to access RESPONSE services"/>
+            <column name="name" value="ROLE_ANSWER"/>
+            <column name="description" value="role to access ANSWER services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
         <insert tableName="roles">
@@ -347,6 +347,11 @@
         <insert tableName="roles">
             <column name="name" value="ROLE_AUDIT"/>
             <column name="description" value="role to access AUDIT services"/>
+            <column name="status" valueBoolean="true"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+            <column name="description" value="role to access ADMIN services"/>
             <column name="status" valueBoolean="true"/>
         </insert>
     </changeSet>
@@ -371,10 +376,6 @@
         <insert tableName="profile_role">
             <column name="profile_id" value="1"/>
             <column name="role_id" value="7"/>
-        </insert>
-        <insert tableName="profile_role">
-            <column name="profile_id" value="1"/>
-            <column name="role_id" value="8"/>
         </insert>
         <insert tableName="profile_role">
             <column name="profile_id" value="2"/>
@@ -411,6 +412,10 @@
         <insert tableName="profile_role">
             <column name="profile_id" value="2"/>
             <column name="role_id" value="9"/>
+        </insert>
+        <insert tableName="profile_role">
+            <column name="profile_id" value="2"/>
+            <column name="role_id" value="10"/>
         </insert>
         <insert tableName="profile_role">
             <column name="profile_id" value="3"/>
