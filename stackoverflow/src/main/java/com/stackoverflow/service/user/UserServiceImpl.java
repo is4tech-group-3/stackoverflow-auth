@@ -131,7 +131,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
 
-        if(!profileRepository.existsById(profileId)) throw new EntityNotFoundException("Profile not found with ID: " + profileId);
+        if (!profileRepository.existsById(profileId))
+            throw new EntityNotFoundException("Profile not found with ID: " + profileId);
 
         user.setProfileId(profileId);
 
