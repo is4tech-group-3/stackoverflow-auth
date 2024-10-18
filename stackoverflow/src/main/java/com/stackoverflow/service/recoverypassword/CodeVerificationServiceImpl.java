@@ -12,7 +12,6 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,14 +24,9 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class CodeVerificationServiceImpl implements CodeVerificationService {
-    @Autowired
-    private CodeVerificationRepository codeVerificationRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MailService mailService;
+    private final CodeVerificationRepository codeVerificationRepository;
+    private final UserRepository userRepository;
+    private final MailService mailService;
 
     private final Validator validator;
 

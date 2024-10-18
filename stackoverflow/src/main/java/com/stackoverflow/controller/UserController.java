@@ -1,6 +1,5 @@
 package com.stackoverflow.controller;
 
-import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.codeverification.EmailDto;
 import com.stackoverflow.dto.codeverification.PasswordResetDto;
 import com.stackoverflow.dto.codeverification.PasswordResponse;
@@ -111,7 +110,8 @@ public class UserController {
     }
 
     @PatchMapping("/updateProfile/{id}")
-    public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id, @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) {
+    public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id,
+            @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) {
         UserResponse updatedUser = userService.updateProfileUser(id, userProfileUpdateRequest.getProfileId());
         return ResponseEntity.ok(updatedUser);
     }
@@ -122,11 +122,12 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PatchMapping("/changePhotoProfile")
-    public ResponseEntity<UserResponse> changePhotoProfile(@ModelAttribute UserPhotoRequest userPhotoRequest){
-        UserResponse user = userService.changePhotoProfile(userPhotoRequest);
+    @PatchMapping("/changePhotoProfile/{id}")
+    public ResponseEntity<UserResponse> changePhotoProfile(
+            @PathVariable("id") Long id,
+            @ModelAttribute UserPhotoRequest userPhotoRequest) {
+        UserResponse user = userService.changePhotoProfile(id, userPhotoRequest);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 }
-

@@ -27,6 +27,8 @@ import java.util.Set;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
+    private static final String PROFILE_NOT_FOUND = "Profile not found with id: ";
+
     private final RoleRepository roleRepository;
     private final ProfileRepository profileRepository;
     private final Validator validator;
@@ -58,13 +60,13 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Profile findProfileById(Long idProfile) {
         return profileRepository.findById(idProfile)
-                .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + idProfile));
+                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND + idProfile));
     }
 
     @Override
     public Profile updateProfile(Long idProfile, ProfileRequest profileRequest) {
         Profile profile = profileRepository.findById(idProfile)
-                .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + idProfile));
+                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND + idProfile));
 
         if (!profile.getName().equals(profileRequest.getName()) && profileRepository.findByName(profileRequest.getName()).isPresent()) {
             throw new DataIntegrityViolationException("Profile name already exists");
@@ -89,7 +91,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Profile changeStatusProfile(Long id) {
         Profile profile = profileRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Profile not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND + id));
         profile.setStatus(!profile.getStatus());
         return profileRepository.save(profile);
     }

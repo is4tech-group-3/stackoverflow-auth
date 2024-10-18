@@ -1,6 +1,5 @@
 package com.stackoverflow.bo;
 
-import java.io.Serializable;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -30,7 +29,7 @@ import lombok.ToString;
 @Builder
 @Entity
 @Table(name = "profiles")
-public class Profile implements Serializable{
+public class Profile {
     @Id
     @Column(name = "profile_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
