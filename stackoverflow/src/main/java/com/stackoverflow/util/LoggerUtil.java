@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 public class LoggerUtil {
 
-    private LoggerUtil{
+    private LoggerUtil(){
 
     }
 

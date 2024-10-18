@@ -1,6 +1,5 @@
 package com.stackoverflow.service.user;
 
-import com.stackoverflow.bo.Profile;
 import com.stackoverflow.bo.User;
 import com.stackoverflow.dto.user.UserPhotoRequest;
 import com.stackoverflow.dto.user.UserRequestUpdate;
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     public Optional<UserResponse> getUserById(Long id) {
         Optional<User> userFound = userRepository.findById(id);
-        return userFound.map(userConvert::UserToUserResponse);
+        return userFound.map(userConvert::userToUserResponse);
     }
 
     public void deleteUser(Long id) {
@@ -71,7 +70,7 @@ public class UserServiceImpl implements UserService {
         if (!violations.isEmpty())
             throw new ConstraintViolationException(violations);
 
-        return userConvert.UserToUserResponse(userRepository.save(user));
+        return userConvert.userToUserResponse(userRepository.save(user));
     }
 
     private UserResponse convertToUserResponse(User user) {
@@ -114,13 +113,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserResponse> getUserByUsername(String username) {
         Optional<User> userFound = userRepository.findByUsername(username);
-        return userFound.map(userConvert::UserToUserResponse);
+        return userFound.map(userConvert::userToUserResponse);
     }
 
     @Override
     public Optional<UserResponse> getUserByEmail(String email) {
         Optional<User> userFound = userRepository.findByEmail(email);
-        return userFound.map(userConvert::UserToUserResponse);
+        return userFound.map(userConvert::userToUserResponse);
     }
 
     @Override
@@ -128,12 +127,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
 
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + profileId));
+        if(!profileRepository.existsById(profileId)) throw new EntityNotFoundException("Profile not found with ID: " + profileId);
 
         user.setProfileId(profileId);
 
-        return userConvert.UserToUserResponse(userRepository.save(user));
+        return userConvert.userToUserResponse(userRepository.save(user));
     }
 
     @Override
@@ -144,7 +142,7 @@ public class UserServiceImpl implements UserService {
         user.setStatus(!user.getStatus());
 
         User updatedUser = userRepository.save(user);
-        return userConvert.UserToUserResponse(updatedUser);
+        return userConvert.userToUserResponse(updatedUser);
     }
 
     @Override
@@ -170,7 +168,7 @@ public class UserServiceImpl implements UserService {
         user.setProfilePhoto(imageUrl);
         User updateUser = userRepository.save(user);
 
-        return userConvert.UserToUserResponse(updateUser);
+        return userConvert.userToUserResponse(updateUser);
     }
 
 }

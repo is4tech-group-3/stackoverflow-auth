@@ -19,7 +19,7 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    private final String ENTITY_NAME = "PROFILE";
+    private static final String ENTITY_NAME = "PROFILE";
 
     @AuditAnnotation(ENTITY_NAME)
     @PostMapping

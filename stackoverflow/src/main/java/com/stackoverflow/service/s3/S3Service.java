@@ -3,6 +3,7 @@ package com.stackoverflow.service.s3;
 import java.io.IOException;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.stackoverflow.dto.s3.Asset;
 
+@AllArgsConstructor
 @Service
 public class S3Service {
     private static final String BUCKET = "buckets3bugstack";

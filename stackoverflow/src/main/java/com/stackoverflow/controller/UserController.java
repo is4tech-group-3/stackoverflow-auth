@@ -26,7 +26,7 @@ public class UserController {
     private final UserService userService;
     private final CodeVerificationService codeVerificationService;
 
-    private final String ENTITY_NAME = "USER";
+    private static final String ENTITY_NAME = "USER";
 
     @AuditAnnotation(ENTITY_NAME)
     @GetMapping

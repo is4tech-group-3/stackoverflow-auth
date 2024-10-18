@@ -14,8 +14,6 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
 
-    private static final String DESCRIPTION
-
     @Value("${cors.allowed.origins:*}")
     private String allowOrigin;
 
@@ -36,13 +34,4 @@ public class CorsFilter implements Filter {
             chain.doFilter(request, response);
         }
     }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
-    public void destroy() {
-    }
-
 }
