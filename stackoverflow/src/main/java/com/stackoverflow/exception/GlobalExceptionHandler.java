@@ -1,10 +1,10 @@
 package com.stackoverflow.exception;
 
-import com.stackoverflow.util.LoggerUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -99,10 +99,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetail, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ProblemDetail> handleAuthenticationException(AuthenticationException ex) {
+        errorDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        errorDetail.setProperty(DESCRIPTION, "User authentication error");
+        return new ResponseEntity<>(errorDetail, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> handleException(Exception ex) {
         errorDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
-        LoggerUtil.loggerDebug("The unhandled exception is of type: " + ex.getClass().getSimpleName());
+        errorDetail.setProperty("info:", "The unhandled exception is of type: " + ex.getClass().getSimpleName());
         errorDetail.setProperty("type", ex.getClass().getSimpleName());
         errorDetail.setProperty(DESCRIPTION, ex.getMessage() != null ? ex.getMessage() : "Unknown error");
         errorDetail.setProperty("class", ex.getStackTrace()[0].getClassName());

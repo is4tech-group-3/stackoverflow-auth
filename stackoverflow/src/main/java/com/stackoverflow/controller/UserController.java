@@ -109,6 +109,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @PatchMapping("/updateProfile/{id}")
     public ResponseEntity<UserResponse> updateUserProfile(@PathVariable Long id,
             @RequestBody UserProfileUpdateRequest userProfileUpdateRequest) {
@@ -116,12 +117,14 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @PatchMapping("/changeStatus/{id}")
     public ResponseEntity<UserResponse> changeStatusUser(@PathVariable("id") Long idUser) {
         UserResponse user = userService.changeStatusUser(idUser);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @AuditAnnotation(ENTITY_NAME)
     @PatchMapping("/changePhotoProfile/{id}")
     public ResponseEntity<UserResponse> changePhotoProfile(
             @PathVariable("id") Long id,

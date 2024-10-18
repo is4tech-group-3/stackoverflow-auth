@@ -19,11 +19,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -149,7 +153,15 @@ public class UserServiceImpl implements UserService {
     public UserResponse changePhotoProfile(Long idUser, UserPhotoRequest userPhotoRequest) {
         User user = userRepository.findById(idUser)
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + idUser));
-
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        Long userId = ((User) userDetails).getId();
+        List<String> roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                .stream().map(GrantedAuthority::getAuthority)
+                .toList();
+        if (!Objects.equals(user.getId(), userId) && !roles.contains("ADMIN")) {
+            throw new AccessDeniedException("You do not have permission to edit this answer");
+        }
         if (user.getProfilePhoto() != null && !user.getProfilePhoto().isEmpty()) {
             String oldKey = user.getProfilePhoto().substring(user.getProfilePhoto().lastIndexOf("/") + 1);
             try {
