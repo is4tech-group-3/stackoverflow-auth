@@ -1,12 +1,9 @@
 package com.stackoverflow.service;
 
-import com.stackoverflow.util.LoggerUtil;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -17,16 +14,14 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.util.Map;
 
+@AllArgsConstructor
 @Service
 public class MailService {
 
     private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
-    @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    private FreeMarkerConfigurer freeMarkerConfigurer;
+    private final JavaMailSender javaMailSender;
+    private final FreeMarkerConfigurer freeMarkerConfigurer;
 
     public void sendEmailWelcome(String to, String password, String nameUser){
         String subject = "¡Bienvenido a la familia BUGSTACK! 🥳";

@@ -1,6 +1,5 @@
 package com.stackoverflow.service.user;
 
-import com.stackoverflow.bo.Profile;
 import com.stackoverflow.bo.User;
 import com.stackoverflow.dto.user.UserPhotoRequest;
 import com.stackoverflow.dto.user.UserRequestUpdate;
@@ -32,6 +31,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final String USER_NOT_FOUND = "User not found with ID: ";
+
     private final UserRepository userRepository;
     private final UserConvert userConvert;
     private final PasswordEncoder passwordEncoder;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     public Optional<UserResponse> getUserById(Long id) {
         Optional<User> userFound = userRepository.findById(id);
-        return userFound.map(userConvert::UserToUserResponse);
+        return userFound.map(userConvert::userToUserResponse);
     }
 
     public void deleteUser(Long id) {
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     public UserResponse updateUser(Long id, UserRequestUpdate userRequestUpdate) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + id));
 
         user.setName(userRequestUpdate.getName());
         user.setSurname(userRequestUpdate.getSurname());
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
         if (!violations.isEmpty())
             throw new ConstraintViolationException(violations);
 
-        return userConvert.UserToUserResponse(userRepository.save(user));
+        return userConvert.userToUserResponse(userRepository.save(user));
     }
 
     private UserResponse convertToUserResponse(User user) {
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
         Long userId = ((User) userDetails).getId();
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (!violations.isEmpty())
@@ -112,46 +113,42 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserResponse> getUserByUsername(String username) {
         Optional<User> userFound = userRepository.findByUsername(username);
-        return userFound.map(userConvert::UserToUserResponse);
+        return userFound.map(userConvert::userToUserResponse);
     }
 
     @Override
     public Optional<UserResponse> getUserByEmail(String email) {
         Optional<User> userFound = userRepository.findByEmail(email);
-        return userFound.map(userConvert::UserToUserResponse);
+        return userFound.map(userConvert::userToUserResponse);
     }
 
     @Override
     public UserResponse updateProfileUser(Long userId, Long profileId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + userId));
 
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + profileId));
+        if(!profileRepository.existsById(profileId)) throw new EntityNotFoundException("Profile not found with ID: " + profileId);
 
         user.setProfileId(profileId);
 
-        return userConvert.UserToUserResponse(userRepository.save(user));
+        return userConvert.userToUserResponse(userRepository.save(user));
     }
 
     @Override
     public UserResponse changeStatusUser(Long idUser) {
         User user = userRepository.findById(idUser)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + idUser));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + idUser));
 
         user.setStatus(!user.getStatus());
 
         User updatedUser = userRepository.save(user);
-        return userConvert.UserToUserResponse(updatedUser);
+        return userConvert.userToUserResponse(updatedUser);
     }
 
     @Override
-    public UserResponse changePhotoProfile(UserPhotoRequest userPhotoRequest) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = ((User) userDetails).getId();
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    public UserResponse changePhotoProfile(Long idUser, UserPhotoRequest userPhotoRequest) {
+        User user = userRepository.findById(idUser)
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND + idUser));
 
         if (user.getProfilePhoto() != null && !user.getProfilePhoto().isEmpty()) {
             String oldKey = user.getProfilePhoto().substring(user.getProfilePhoto().lastIndexOf("/") + 1);
@@ -171,7 +168,7 @@ public class UserServiceImpl implements UserService {
         user.setProfilePhoto(imageUrl);
         User updateUser = userRepository.save(user);
 
-        return userConvert.UserToUserResponse(updateUser);
+        return userConvert.userToUserResponse(updateUser);
     }
 
 }

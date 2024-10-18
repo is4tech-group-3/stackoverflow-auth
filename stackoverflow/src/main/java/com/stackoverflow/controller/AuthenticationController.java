@@ -39,8 +39,8 @@ public class AuthenticationController {
         User authenticatedUser = authenticationService.login(loginUserDto);
 
         List<String> roles = authenticationService.getUserRoles(authenticatedUser);
-
         Long userId = authenticatedUser.getId();
+        String imageProfilePhoto = authenticatedUser.getProfilePhoto();
 
         String jwtToken = jwtService.generateToken(
                 new org.springframework.security.core.userdetails.User(
@@ -48,7 +48,8 @@ public class AuthenticationController {
                         authenticatedUser.getPassword(),
                         Collections.emptyList()),
                 roles,
-                userId 
+                userId,
+                imageProfilePhoto
         );
 
         LoginResponse loginResponse = new LoginResponse();
@@ -56,6 +57,7 @@ public class AuthenticationController {
         loginResponse.setExpiresIn(jwtService.getExpirationTime());
         loginResponse.setRoles(roles);
         loginResponse.setUserId(userId); 
+        loginResponse.setUrlPhotoProfile(imageProfilePhoto);
 
         return ResponseEntity.ok(loginResponse);
     }

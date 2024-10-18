@@ -7,7 +7,6 @@ import com.stackoverflow.util.LoggerUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,20 +24,13 @@ import com.stackoverflow.repository.UserRepository;
 
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthenticationService {
 
-    @Autowired
-    private MailService mailService;
-
-    @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
-    private ProfileRepository profileRepository;
-
+    private final MailService mailService;
+    private final HttpServletRequest request;
+    private final ProfileRepository profileRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -48,11 +40,17 @@ public class AuthenticationService {
             UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            S3Service s3Service) {
+            S3Service s3Service,
+            MailService mailService,
+            HttpServletRequest request,
+            ProfileRepository profileRepository) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.s3Service = s3Service;
+        this.mailService = mailService;
+        this.request = request;
+        this.profileRepository = profileRepository;
     }
 
     public String generatePassword() {
@@ -127,7 +125,7 @@ public class AuthenticationService {
         return profileRepository.findById(user.getProfileId())
                 .map(profile -> profile.getRoles().stream()
                         .map(Role::getName)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .orElse(Collections.emptyList());
     }
 

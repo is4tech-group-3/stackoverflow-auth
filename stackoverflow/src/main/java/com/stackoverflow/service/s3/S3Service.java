@@ -3,7 +3,7 @@ package com.stackoverflow.service.s3;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,12 +16,12 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.stackoverflow.dto.s3.Asset;
 
+@AllArgsConstructor
 @Service
 public class S3Service {
-    private final static String BUCKET = "buckets3bugstack";
+    private static final String BUCKET = "buckets3bugstack";
 
-    @Autowired
-    private AmazonS3Client s3Client;
+    private final AmazonS3Client s3Client;
 
     public String putObject(MultipartFile multipartFile){
         String extension= StringUtils.getFilenameExtension(multipartFile.getOriginalFilename());

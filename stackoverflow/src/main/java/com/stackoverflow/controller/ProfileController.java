@@ -4,8 +4,6 @@ import com.stackoverflow.bo.Profile;
 import com.stackoverflow.dto.profile.ProfileRequest;
 import com.stackoverflow.service.profile.ProfileService;
 
-import java.util.List;
-
 import org.springframework.web.bind.annotation.*;
 import com.stackoverflow.util.AuditAnnotation;
 import lombok.AllArgsConstructor;
@@ -21,7 +19,7 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    private final String ENTITY_NAME = "PROFILE";
+    private static final String ENTITY_NAME = "PROFILE";
 
     @AuditAnnotation(ENTITY_NAME)
     @PostMapping

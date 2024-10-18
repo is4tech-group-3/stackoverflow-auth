@@ -22,7 +22,6 @@ import com.stackoverflow.service.login.JwtService;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -63,12 +62,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 //Extraer roles desde el jwt
                 List<String> roles = (List<String>) jwtService.extractClaim(jwt, claims -> claims.get("roles"));
-                Long userId = jwtService.extractUserId(jwt);
 
                 //Convertir roles a GrantedAuthority
                 Collection<? extends GrantedAuthority> authorities = roles.stream()
                         .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+                        .toList();
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

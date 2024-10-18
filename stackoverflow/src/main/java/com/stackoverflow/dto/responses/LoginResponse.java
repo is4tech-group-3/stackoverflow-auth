@@ -14,4 +14,5 @@ public class LoginResponse {
     private long expiresIn;
     private List<String> roles;
     private Long userId;
+    private String urlPhotoProfile;
 }

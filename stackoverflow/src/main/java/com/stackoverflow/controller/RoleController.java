@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/v1/role")
 public class RoleController {
 
-    private final String ENTITY_NAME = "ROLE";
+    private static final String ENTITY_NAME = "ROLE";
 
     private final RoleService roleService;
 

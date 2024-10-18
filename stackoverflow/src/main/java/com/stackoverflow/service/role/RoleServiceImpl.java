@@ -19,6 +19,8 @@ import java.util.Set;
 @Service
 public class RoleServiceImpl implements RoleService {
 
+    private static final String ROLE_NOT_FOUND = "Role not found with id: ";
+
     private final RoleRepository roleRepository;
     private final Validator validator;
 
@@ -42,13 +44,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findRoleById(Long idRole) {
         return roleRepository.findById(idRole)
-                .orElseThrow(() -> new EntityNotFoundException("Role not found with id: " + idRole));
+                .orElseThrow(() -> new EntityNotFoundException(ROLE_NOT_FOUND + idRole));
     }
 
     @Override
     public Role updateRole(Long idRole, RoleRequest roleRequest) {
         Role role = roleRepository.findById(idRole)
-                .orElseThrow(() -> new EntityNotFoundException("Role not found with id: " + idRole));
+                .orElseThrow(() -> new EntityNotFoundException(ROLE_NOT_FOUND + idRole));
 
         if (!role.getName().equals(roleRequest.getName()) && roleRepository.findByName(roleRequest.getName()).isPresent()) {
             throw new DataIntegrityViolationException("Role name already exists");
@@ -69,7 +71,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role changeStatusRole(Long idRole) {
         Role role = roleRepository.findById(idRole)
-                .orElseThrow(() -> new EntityNotFoundException("Role not found with id: " + idRole));
+                .orElseThrow(() -> new EntityNotFoundException(ROLE_NOT_FOUND + idRole));
         role.setStatus(!role.getStatus());
         return roleRepository.save(role);
     }
