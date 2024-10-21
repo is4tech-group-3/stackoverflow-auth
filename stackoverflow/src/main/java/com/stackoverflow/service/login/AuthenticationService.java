@@ -112,13 +112,15 @@ public class AuthenticationService {
 
     public User login(LoginUserDto input) {
 
+        User user = userRepository.findByEmail(input.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),
                         input.getPassword()));
 
-        return userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return user;
     }
 
     public List<String> getUserRoles(User user) {

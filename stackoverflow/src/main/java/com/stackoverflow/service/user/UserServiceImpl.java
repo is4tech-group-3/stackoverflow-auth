@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
             throw new ConstraintViolationException(violations);
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword()))
-            throw new RuntimeException("Old password is incorrect");
+            throw new ConstraintViolationException("Old password is incorrect", null);
 
         String regex = "^(?=.*\\d)(?=.*[\\u0021-\\u002b\\u003c-\\u0040])(?=.*[A-Z])(?=.*[a-z])\\S{8,16}$";
         if (!newPassword.matches(regex)) {
