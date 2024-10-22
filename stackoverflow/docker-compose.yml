@@ -1,0 +1,15 @@
+services:
+  db_postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_DB: stackoverflow
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: is4tech
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data:
